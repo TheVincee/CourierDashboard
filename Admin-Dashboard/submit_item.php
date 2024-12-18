@@ -1,82 +1,51 @@
 <?php
+header('Content-Type: application/json');
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Database connection
-$servername = "localhost"; // Replace with your server name
-$username = "root"; // Replace with your database username
-$password = ""; // Replace with your database password
-$dbname = "courier_db"; // Replace with your database name
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+$conn = new mysqli('localhost', 'root', '', 'courier_db');
 if ($conn->connect_error) {
-    die(json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]));
+    die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
 }
 
-// Check if the request is POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve form data
-    $itemName = $_POST['item_name'];
-    $quantity = $_POST['quantity'];
-    $destination = $_POST['destination'];
-    $itemLoad = $_POST['item_load'];
-    $distance = $_POST['distance'];
-    $fuelConsumptionRate = $_POST['fuel_consumption_rate'];
-    $totalFuelNeeded = $_POST['total_fuel_needed'];
-    $totalCost = $_POST['total_cost'];
-    $riderId = $_POST['rider_id']; // Assuming rider_id is passed in the form
+// Get form data
+$item_name = $_POST['item_name'];
+$quantity = $_POST['quantity'];
+$destination = $_POST['destination'];
+$item_load = $_POST['item_load'];
+$distance = $_POST['distance'];
+$fuel_consumption_rate = $_POST['fuel_consumption_rate'];
+$total_fuel_needed = $_POST['total_fuel_needed'];
+$total_cost = $_POST['total_cost'];
 
-    // Validate required fields
-    if (empty($itemName) || empty($quantity) || empty($destination) || empty($itemLoad) || empty($distance) || empty($riderId)) {
-        echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
-        exit;
-    }
+// Ensure that the first name is passed from the form or from a session
+$first_name = isset($_POST['first_name']) ? $_POST['first_name'] : '';
 
-    // Fetch first_name from the riders table using rider_id
-    $riderCheckSql = "SELECT first_name FROM riders WHERE id = ?";
-    $riderStmt = $conn->prepare($riderCheckSql);
-    $riderStmt->bind_param("i", $riderId); // Assuming rider_id is an integer
-    $riderStmt->execute();
-    $riderStmt->store_result();
+// Insert data into the database
+$sql = "INSERT INTO admin_items (item_name, quantity, destination, item_load, distance, fuel_consumption_rate, total_fuel_needed, total_cost, first_name) 
+        VALUES ('$item_name', '$quantity', '$destination', '$item_load', '$distance', '$fuel_consumption_rate', '$total_fuel_needed', '$total_cost', '$first_name')";
 
-    if ($riderStmt->num_rows === 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Invalid rider ID.']);
-        $riderStmt->close();
-        exit;
-    }
-
-    // Fetch the first_name from the result
-    $riderStmt->bind_result($firstName);
-    $riderStmt->fetch();
-    $riderStmt->close();
-
-    // SQL query to insert data into the items table
-    $sql = "INSERT INTO admin_items (item_name, quantity, destination, item_load, distance, fuel_consumption_rate, total_fuel_needed, total_cost, rider_id, first_name) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param(
-        "sisdidddis",  // Adjusted to include rider_id and first_name
-        $itemName,
-        $quantity,
-        $destination,
-        $itemLoad,
-        $distance,
-        $fuelConsumptionRate,
-        $totalFuelNeeded,
-        $totalCost,
-        $riderId,
-        $firstName
-    );
-
-    if ($stmt->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Item added successfully.']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Error adding item: ' . $conn->error]);
-    }
-
-    $stmt->close();
+if ($conn->query($sql) === TRUE) {
+    $item_id = $conn->insert_id; // Get the last inserted ID
+    echo json_encode([
+        'status' => 'success',
+        'message' => 'Item added successfully',
+        'item_id' => $item_id,
+        'item_name' => $item_name,
+        'quantity' => $quantity,
+        'destination' => $destination,
+        'item_load' => $item_load,
+        'distance' => $distance,
+        'fuel_consumption_rate' => $fuel_consumption_rate,
+        'total_fuel_needed' => $total_fuel_needed,
+        'total_cost' => $total_cost,
+        'first_name' => $first_name // Include first name in the response
+    ]);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
+    echo json_encode(['status' => 'error', 'message' => 'Error adding item: ' . $conn->error]);
 }
 
 $conn->close();

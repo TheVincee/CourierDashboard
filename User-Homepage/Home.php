@@ -48,23 +48,15 @@
           <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="/LOGIN/Sign-in.php">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
               <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
+              <li><a href="UserProfile.php">Profile</a></li>
+              <li><a href="/LOGIN/Sign-in.php">Log-out</a></li>
             </ul>
           </li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+
 
     </div>
   </header>
@@ -78,12 +70,12 @@
 
         <!-- Slide 1 -->
         <div class="carousel-item active">
-          <div class="carousel-container">
-            <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Selecao</span></h2>
-            <p class="animate__animated animate__fadeInUp">Ut velit est quam dolor ad a aliquid qui aliquid. Sequi ea ut et est quaerat sequi nihil ut aliquam. Occaecati alias dolorem mollitia ut. Similique ea voluptatem. Esse doloremque accusamus repellendus deleniti vel. Minus et tempore modi architecto.</p>
-            <a href="BookingForDelivery.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Read More</a>
-          </div>
-        </div>
+  <div class="carousel-container">
+    <h2 class="animate__animated animate__fadeInDown">Welcome to <span>Courier and Joy Ride</span></h2>
+    <p class="animate__animated animate__fadeInUp">Experience the convenience of reliable courier services and the thrill of joyful rides. Whether you're sending parcels or enjoying a ride, we've got you covered with fast, secure, and enjoyable service.</p>
+    <a href="BookingForDelivery.php" class="btn-get-started animate__animated animate__fadeInUp scrollto">Book Now</a>
+  </div>
+</div>
 
       
 
@@ -110,369 +102,372 @@
     <!-- About Section -->
     <section id="about" class="about section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>About</h2>
-        <p>Who we are</p>
-      </div><!-- End Section Title -->
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>About</h2>
+    <p>Who We Are</p>
+  </div><!-- End Section Title -->
 
-      <div class="container">
+  <div class="container">
 
-        <div class="row gy-4">
+    <div class="row gy-4">
 
-          <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-              magna aliqua.
-            </p>
-            <ul>
-              <li><i class="bi bi-check2-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-              <li><i class="bi bi-check2-circle"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-              <li><i class="bi bi-check2-circle"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo</span></li>
-            </ul>
-          </div>
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
-            <p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-            <a href="#" class="read-more"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-          </div>
-
-        </div>
-
+      <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="100">
+        <p>
+          We are dedicated to providing seamless courier services and exciting joy ride experiences. With a commitment to excellence, we aim to bring convenience and fun to your everyday life.
+        </p>
+        <ul>
+          <li><i class="bi bi-check2-circle"></i> <span>Reliable and secure delivery services you can trust.</span></li>
+          <li><i class="bi bi-check2-circle"></i> <span>Thrilling joy ride options for an unforgettable experience.</span></li>
+          <li><i class="bi bi-check2-circle"></i> <span>Customer-focused solutions tailored to your needs.</span></li>
+        </ul>
       </div>
 
-    </section><!-- /About Section -->
+      <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+        <p>Whether you're sending parcels or seeking a ride, we combine innovation and reliability to deliver top-tier services. Our team is committed to making your journey smooth and enjoyable every step of the way.</p>
+        <a href="#" class="read-more"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
     <!-- Features Section -->
     <section id="features" class="features section">
 
-      <div class="container">
+  <div class="container">
 
-        <ul class="nav nav-tabs row  d-flex" data-aos="fade-up" data-aos-delay="100">
-          <li class="nav-item col-3">
-            <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#features-tab-1">
-              <i class="bi bi-binoculars"></i>
-              <h4 class="d-none d-lg-block">Modi sit est dela pireda nest</h4>
-            </a>
-          </li>
-          <li class="nav-item col-3">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-2">
-              <i class="bi bi-box-seam"></i>
-              <h4 class="d-none d-lg-block">Unde praesenti mara setra le</h4>
-            </a>
-          </li>
-          <li class="nav-item col-3">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-3">
-              <i class="bi bi-brightness-high"></i>
-              <h4 class="d-none d-lg-block">Pariatur explica nitro dela</h4>
-            </a>
-          </li>
-          <li class="nav-item col-3">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-4">
-              <i class="bi bi-command"></i>
-              <h4 class="d-none d-lg-block">Nostrum qui dile node</h4>
-            </a>
-          </li>
-        </ul><!-- End Tab Nav -->
+    <ul class="nav nav-tabs row d-flex" data-aos="fade-up" data-aos-delay="100">
+      <li class="nav-item col-3">
+        <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#features-tab-1">
+          <i class="bi bi-truck"></i>
+          <h4 class="d-none d-lg-block">Reliable Courier Services</h4>
+        </a>
+      </li>
+      <li class="nav-item col-3">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-2">
+          <i class="bi bi-bicycle"></i>
+          <h4 class="d-none d-lg-block">Express Delivery Options</h4>
+        </a>
+      </li>
+      <li class="nav-item col-3">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-3">
+          <i class="bi bi-star"></i>
+          <h4 class="d-none d-lg-block">Joy Rides for All</h4>
+        </a>
+      </li>
+      <li class="nav-item col-3">
+        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#features-tab-4">
+          <i class="bi bi-geo-alt"></i>
+          <h4 class="d-none d-lg-block">Seamless Navigation</h4>
+        </a>
+      </li>
+    </ul><!-- End Tab Nav -->
 
-        <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
+    <div class="tab-content" data-aos="fade-up" data-aos-delay="200">
 
-          <div class="tab-pane fade active show" id="features-tab-1">
-            <div class="row">
-              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
-                <p class="fst-italic">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </p>
-                <ul>
-                  <li><i class="bi bi-check2-all"></i>
-                    <spab>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</spab>
-                  </li>
-                  <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit</span>.</li>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-                </ul>
-                <p>
-                  Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                  culpa qui officia deserunt mollit anim id est laborum
-                </p>
-              </div>
-              <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/working-1.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-          </div><!-- End Tab Content Item -->
-
-          <div class="tab-pane fade" id="features-tab-2">
-            <div class="row">
-              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Neque exercitationem debitis soluta quos debitis quo mollitia officia est</h3>
-                <p>
-                  Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                  culpa qui officia deserunt mollit anim id est laborum
-                </p>
-                <p class="fst-italic">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </p>
-                <ul>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Provident mollitia neque rerum asperiores dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-                </ul>
-              </div>
-              <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/working-2.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-          </div><!-- End Tab Content Item -->
-
-          <div class="tab-pane fade" id="features-tab-3">
-            <div class="row">
-              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Voluptatibus commodi ut accusamus ea repudiandae ut autem dolor ut assumenda</h3>
-                <p>
-                  Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                  culpa qui officia deserunt mollit anim id est laborum
-                </p>
-                <ul>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Provident mollitia neque rerum asperiores dolores quos qui a. Ipsum neque dolor voluptate nisi sed.</span></li>
-                </ul>
-                <p class="fst-italic">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </p>
-              </div>
-              <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/working-3.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-          </div><!-- End Tab Content Item -->
-
-          <div class="tab-pane fade" id="features-tab-4">
-            <div class="row">
-              <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
-                <h3>Omnis fugiat ea explicabo sunt dolorum asperiores sequi inventore rerum</h3>
-                <p>
-                  Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                  velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                  culpa qui officia deserunt mollit anim id est laborum
-                </p>
-                <p class="fst-italic">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua.
-                </p>
-                <ul>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                  <li><i class="bi bi-check2-all"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-                </ul>
-              </div>
-              <div class="col-lg-6 order-1 order-lg-2 text-center">
-                <img src="assets/img/working-4.jpg" alt="" class="img-fluid">
-              </div>
-            </div>
-          </div><!-- End Tab Content Item -->
-
-        </div>
-
-      </div>
-
-    </section><!-- /Features Section -->
-
-    <!-- Call To Action Section -->
-    <section id="call-to-action" class="call-to-action section dark-background">
-
-      <div class="container">
-
-        <div class="row" data-aos="zoom-in" data-aos-delay="100">
-          <div class="col-xl-9 text-center text-xl-start">
-            <h3>Call To Action</h3>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <div class="tab-pane fade active show" id="features-tab-1">
+        <div class="row">
+          <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+            <h3>Dependable Delivery Services Tailored to Your Needs</h3>
+            <p class="fst-italic">
+              We ensure your packages are delivered safely and on time with our trusted courier services.
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Fast and secure delivery for your parcels.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Real-time tracking to keep you informed.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Affordable solutions for businesses and individuals.</span></li>
+            </ul>
+            <p>
+              Experience a hassle-free courier service designed to prioritize your convenience and satisfaction.
+            </p>
           </div>
-          <div class="col-xl-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">Call To Action</a>
+          <div class="col-lg-6 order-1 order-lg-2 text-center">
+            <img src="assets/img/courier-1.jpg" alt="Reliable Courier Services" class="img-fluid">
           </div>
         </div>
+      </div><!-- End Tab Content Item -->
 
-      </div>
+      <div class="tab-pane fade" id="features-tab-2">
+        <div class="row">
+          <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+            <h3>Fast and Flexible Express Deliveries</h3>
+            <p>
+              Need it delivered quickly? Our express services are designed to get your packages where they need to be, fast.
+            </p>
+            <p class="fst-italic">
+              From urgent documents to last-minute gifts, we deliver with speed and efficiency.
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Same-day and next-day delivery options available.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Special handling for fragile or time-sensitive items.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Reliable express couriers for peace of mind.</span></li>
+            </ul>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 text-center">
+            <img src="assets/img/courier-2.jpg" alt="Express Delivery Options" class="img-fluid">
+          </div>
+        </div>
+      </div><!-- End Tab Content Item -->
 
-    </section><!-- /Call To Action Section -->
+      <div class="tab-pane fade" id="features-tab-3">
+        <div class="row">
+          <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+            <h3>Unforgettable Joy Rides for Everyone</h3>
+            <p>
+              Escape the ordinary with our thrilling joy rides. Explore new destinations and make lasting memories.
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Exciting routes through scenic landscapes.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Safe and well-maintained vehicles for every ride.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Perfect for families, friends, or solo adventurers.</span></li>
+            </ul>
+            <p class="fst-italic">
+              Make every moment count with our specially designed joy ride packages.
+            </p>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 text-center">
+            <img src="assets/img/joyride-1.jpg" alt="Joy Rides" class="img-fluid">
+          </div>
+        </div>
+      </div><!-- End Tab Content Item -->
+
+      <div class="tab-pane fade" id="features-tab-4">
+        <div class="row">
+          <div class="col-lg-6 order-2 order-lg-1 mt-3 mt-lg-0">
+            <h3>Navigate Your Way with Ease</h3>
+            <p>
+              Our advanced navigation tools ensure you always find the fastest, safest routes to your destination.
+            </p>
+            <p class="fst-italic">
+              From package delivery to joy rides, enjoy seamless navigation with our technology.
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Real-time location updates for convenience.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Efficient route planning to save time and effort.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>User-friendly systems for stress-free experiences.</span></li>
+            </ul>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 text-center">
+            <img src="assets/img/navigation.jpg" alt="Seamless Navigation" class="img-fluid">
+          </div>
+        </div>
+      </div><!-- End Tab Content Item -->
+
+    </div>
+
+  </div>
+
+</section><!-- /Features Section -->
+
+
+   <!-- Call To Action Section -->
+<section id="call-to-action" class="call-to-action section dark-background">
+
+<div class="container">
+
+  <div class="row" data-aos="zoom-in" data-aos-delay="100">
+    <div class="col-xl-9 text-center text-xl-start">
+      <h3>Join Our Mission</h3>
+      <p>Take the first step toward making a difference. Partner with us to create impactful solutions and build a brighter future for everyone.</p>
+    </div>
+    <div class="col-xl-3 cta-btn-container text-center">
+      <a class="cta-btn align-middle" href="#">Get Started</a>
+    </div>
+  </div>
+
+</div>
+
+</section>
 
     <!-- Services Section -->
-    <section id="services" class="services section">
+<section id="services" class="services section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Services</h2>
-        <p>What we do offer</p>
-      </div><!-- End Section Title -->
+<!-- Section Title -->
+<div class="container section-title" data-aos="fade-up">
+  <h2>Our Services</h2>
+  <p>Discover what we offer to meet your needs</p>
+</div><!-- End Section Title -->
 
-      <div class="container">
+<div class="container">
 
-        <div class="row gy-4">
+  <div class="row gy-4">
 
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-item  position-relative">
-              <div class="icon">
-                <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Nesciunt Mete</h3>
-              </a>
-              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis tempore et consequatur.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-calendar4-week" style="color: #fd7e14;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Eosle Commodi</h3>
-              </a>
-              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut nesciunt dolorem.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-chat-text" style="color: #20c997;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Ledo Markt</h3>
-              </a>
-              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci eos earum corrupti.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-credit-card-2-front" style="color: #df1529;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Asperiores Commodit</h3>
-              </a>
-              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident adipisci neque.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-globe" style="color: #6610f2;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Velit Doloremque</h3>
-              </a>
-              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem alias eius labore.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-clock" style="color: #f3268c;"></i>
-              </div>
-              <a href="service-details.html" class="stretched-link">
-                <h3>Dolori Architecto</h3>
-              </a>
-              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti recusandae ducimus enim.</p>
-            </div>
-          </div><!-- End Service Item -->
-
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-cash-stack" style="color: #0dcaf0;"></i>
         </div>
-
+        <a href="service-details.html" class="stretched-link">
+          <h3>Financial Planning</h3>
+        </a>
+        <p>We help you manage your finances, providing customized strategies for growth and security tailored to your goals.</p>
       </div>
+    </div><!-- End Service Item -->
 
-    </section><!-- /Services Section -->
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-calendar4-week" style="color: #fd7e14;"></i>
+        </div>
+        <a href="service-details.html" class="stretched-link">
+          <h3>Project Scheduling</h3>
+        </a>
+        <p>Streamline your projects with our efficient scheduling solutions, ensuring on-time delivery and seamless workflows.</p>
+      </div>
+    </div><!-- End Service Item -->
+
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-chat-text" style="color: #20c997;"></i>
+        </div>
+        <a href="service-details.html" class="stretched-link">
+          <h3>Consultation Services</h3>
+        </a>
+        <p>Get expert advice and actionable insights to tackle challenges and unlock new opportunities for your business.</p>
+      </div>
+    </div><!-- End Service Item -->
+
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-credit-card-2-front" style="color: #df1529;"></i>
+        </div>
+        <a href="service-details.html" class="stretched-link">
+          <h3>Payment Solutions</h3>
+        </a>
+        <p>Experience seamless transactions with our secure and user-friendly payment processing services.</p>
+      </div>
+    </div><!-- End Service Item -->
+
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-globe" style="color: #6610f2;"></i>
+        </div>
+        <a href="service-details.html" class="stretched-link">
+          <h3>Global Networking</h3>
+        </a>
+        <p>Expand your reach with our global networking services, connecting you to partners and clients worldwide.</p>
+      </div>
+    </div><!-- End Service Item -->
+
+    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+      <div class="service-item position-relative">
+        <div class="icon">
+          <i class="bi bi-clock" style="color: #f3268c;"></i>
+        </div>
+        <a href="service-details.html" class="stretched-link">
+          <h3>Time Management</h3>
+        </a>
+        <p>Maximize productivity with our time management solutions, designed to keep you focused on what matters most.</p>
+      </div>
+    </div><!-- End Service Item -->
+
+  </div>
+
+</div>
+
+</section><!-- /Services Section -->
 
   
    
     <!-- Pricing Section -->
-    <section id="pricing" class="pricing section">
-
-      <!-- Section Title -->
-      
-    <!-- Faq Section -->
     <section id="faq" class="faq section">
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Frequently Asked Questions</h2>
-        <p>Frequently Asked Questions</p>
-      </div><!-- End Section Title -->
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>FAQs</h2>
+    <p>Get to Know Us Better</p>
+  </div><!-- End Section Title -->
 
-      <div class="container" data-aos="fade-up">
-        <div class="row">
-          <div class="col-12">
-            <div class="custom-accordion" id="accordion-faq">
-              <div class="accordion-item">
-                <h2 class="mb-0">
-                  <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-faq-1">
-                    How to download and register?
-                  </button>
-                </h2>
+  <div class="container" data-aos="fade-up">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="accordion" id="faqAccordion">
 
-                <div id="collapse-faq-1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion-faq">
-                  <div class="accordion-body">
-                    Far far away, behind the word mountains, far from the countries
-                    Vokalia and Consonantia, there live the blind texts. Separated
-                    they live in Bookmarksgrove right at the coast of the Semantics,
-                    a large language ocean.
-                  </div>
-                </div>
-              </div>
-              <!-- .accordion-item -->
-
-              <div class="accordion-item">
-                <h2 class="mb-0">
-                  <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-faq-2" "="">
-                How to create your paypal account?
+          <!-- FAQ Item 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-heading-1">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-1" aria-expanded="true" aria-controls="faq-collapse-1">
+                What is your vision?
               </button>
             </h2>
-            <div id=" collapse-faq-2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion-faq">
-                    <div class="accordion-body">
-                      A small river named Duden flows by their place and supplies it
-                      with the necessary regelialia. It is a paradisematic country, in
-                      which roasted parts of sentences fly into your mouth.
-                    </div>
+            <div id="faq-collapse-1" class="accordion-collapse collapse show" aria-labelledby="faq-heading-1" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Our vision is to empower individuals and businesses by providing innovative and accessible solutions that simplify everyday challenges and inspire growth.
               </div>
             </div>
-            <!-- .accordion-item -->
-
-            <div class="accordion-item">
-              <h2 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-faq-3">
-                  How to link your paypal and bank account?
-                </button>
-              </h2>
-
-              <div id="collapse-faq-3" class="collapse" aria-labelledby="headingThree" data-parent="#accordion-faq">
-                <div class="accordion-body">
-                  When she reached the first hills of the Italic Mountains, she
-                  had a last view back on the skyline of her hometown
-                  Bookmarksgrove, the headline of Alphabet Village and the subline
-                  of her own road, the Line Lane. Pityful a rethoric question ran
-                  over her cheek, then she continued her way.
-                </div>
-              </div>
-            </div>
-            <!-- .accordion-item -->
-
           </div>
+          <!-- End FAQ Item 1 -->
+
+          <!-- FAQ Item 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-heading-2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-2" aria-expanded="false" aria-controls="faq-collapse-2">
+                How do you operate?
+              </button>
+            </h2>
+            <div id="faq-collapse-2" class="accordion-collapse collapse" aria-labelledby="faq-heading-2" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                We operate through a combination of dedicated teams, cutting-edge technology, and customer-focused approaches to ensure the best experience for our users and partners.
+              </div>
+            </div>
+          </div>
+          <!-- End FAQ Item 2 -->
+
+          <!-- FAQ Item 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-heading-3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-3" aria-expanded="false" aria-controls="faq-collapse-3">
+                What industries do you serve?
+              </button>
+            </h2>
+            <div id="faq-collapse-3" class="accordion-collapse collapse" aria-labelledby="faq-heading-3" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                We cater to a variety of industries including technology, healthcare, education, e-commerce, and finance, tailoring our services to meet specific needs.
+              </div>
+            </div>
+          </div>
+          <!-- End FAQ Item 3 -->
+
+          <!-- FAQ Item 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-heading-4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-4" aria-expanded="false" aria-controls="faq-collapse-4">
+                How can I contact your team?
+              </button>
+            </h2>
+            <div id="faq-collapse-4" class="accordion-collapse collapse" aria-labelledby="faq-heading-4" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                You can reach us through our contact page, email, or customer support hotline. We're always here to assist you with any inquiries or feedback.
+              </div>
+            </div>
+          </div>
+          <!-- End FAQ Item 4 -->
+
+          <!-- FAQ Item 5 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq-heading-5">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq-collapse-5" aria-expanded="false" aria-controls="faq-collapse-5">
+                What sets you apart from competitors?
+              </button>
+            </h2>
+            <div id="faq-collapse-5" class="accordion-collapse collapse" aria-labelledby="faq-heading-5" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Our commitment to innovation, personalized service, and an unwavering focus on customer satisfaction distinguishes us from others in the industry.
+              </div>
+            </div>
+          </div>
+          <!-- End FAQ Item 5 -->
+
         </div>
       </div>
-      </div>
-    </section><!-- /Faq Section -->
+    </div>
+  </div>
+</section><!-- /Faq Section -->
 
     <!-- Team Section -->
     <section id="team" class="team section">
@@ -647,30 +642,36 @@
   </main>
 
   <footer id="footer" class="footer dark-background">
+  <div class="container">
+
+    <!-- Site Name -->
+    <h3 class="sitename">Selecao</h3>
+
+    <!-- Footer Description -->
+    <p>At Selecao, we are committed to delivering top-tier solutions with an unwavering focus on quality and customer satisfaction. Join us on our journey to make a meaningful impact.</p>
+
+    <!-- Social Media Links -->
+    <div class="social-links d-flex justify-content-center">
+      <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+      <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+      <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+      <a href="#" aria-label="Skype"><i class="bi bi-skype"></i></a>
+      <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+    </div>
+
+    <!-- Copyright & Credits -->
     <div class="container">
-      <h3 class="sitename">Selecao</h3>
-      <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p>
-      <div class="social-links d-flex justify-content-center">
-        <a href=""><i class="bi bi-twitter-x"></i></a>
-        <a href=""><i class="bi bi-facebook"></i></a>
-        <a href=""><i class="bi bi-instagram"></i></a>
-        <a href=""><i class="bi bi-skype"></i></a>
-        <a href=""><i class="bi bi-linkedin"></i></a>
+      <div class="copyright text-center">
+        <span>&copy; <strong class="px-1 sitename">Selecao</strong> 2024. All Rights Reserved.</span>
       </div>
-      <div class="container">
-        <div class="copyright">
-          <span>Copyright</span> <strong class="px-1 sitename">Selecao</strong> <span>All Rights Reserved</span>
-        </div>
-        <div class="credits">
-          <!-- All the links in the footer should remain intact. -->
-          <!-- You can delete the links only if you've purchased the pro version. -->
-          <!-- Licensing information: https://bootstrapmade.com/license/ -->
-          <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
+      <div class="credits text-center">
+        
       </div>
     </div>
-  </footer>
+
+  </div>
+</footer>
+
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

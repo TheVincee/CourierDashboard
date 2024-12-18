@@ -5,32 +5,26 @@ header('Content-Type: application/json');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Assuming you have a database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "courier_db";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'courier_db');
 if ($conn->connect_error) {
-    die(json_encode(['success' => false, 'message' => 'Connection failed: ' . $conn->connect_error]));
+    die(json_encode(['status' => 'error', 'message' => 'Connection failed: ' . $conn->connect_error]));
 }
 
-// Fetch items from database
-$sql = "SELECT * FROM admin_items"; // Adjust your query accordingly
-$result = $conn->query($sql);
+// SQL query to fetch items
+$sql = "SELECT admin_items.*, riders.first_name 
+        FROM admin_items 
+        LEFT JOIN riders ON admin_items.rider_id = riders.id"; // Ensure correct join condition
 
+$result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $items = [];
-    while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
         $items[] = $row;
     }
-    echo json_encode(['success' => true, 'items' => $items]);
+    echo json_encode(['status' => 'success', 'items' => $items]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'No items found']);
+    echo json_encode(['status' => 'error', 'message' => 'No items found']);
 }
 
 $conn->close();
