@@ -1,0 +1,57 @@
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+  }
+
+  .profile-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 30px;
+    margin-top: 50px;
+  }
+
+  .profile-card h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .profile-card .form-label {
+    font-weight: bold;
+  }
+
+  .profile-card .btn-save {
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 10px;
+  }
+
+  .profile-card .btn-save:hover {
+    background-color: #218838;
+  }
+
+  /* Profile Picture Styling */
+  .profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+  }
+
+  .upload-btn {
+    display: block;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .upload-btn:hover {
+    background-color: #0056b3;}

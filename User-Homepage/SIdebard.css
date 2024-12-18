@@ -1,0 +1,350 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+.wrapper{
+  height: 100%;
+  width: 300px;
+  position: relative;
+}
+.wrapper .menu-btn{
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  background: #4a4a4a;
+  color: #fff;
+  height: 45px;
+  width: 45px;
+  z-index: 9999;
+  border: 1px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+#btn:checked ~ .menu-btn{
+  left: 247px;
+}
+.wrapper .menu-btn i{
+  position: absolute;
+  font-size: 23px;
+  transition: all 0.3s ease;
+}
+.wrapper .menu-btn i.fa-times{
+  opacity: 0;
+}
+#btn:checked ~ .menu-btn i.fa-times{
+  opacity: 1;
+  transform: rotate(-180deg);
+}
+#btn:checked ~ .menu-btn i.fa-bars{
+  opacity: 0;
+  transform: rotate(180deg);
+}
+#sidebar{
+  position: fixed;
+  background: #404040;
+  height: 100%;
+  width: 270px;
+  overflow: hidden;
+  left: -270px;
+  transition: all 0.3s ease;
+}
+#btn:checked ~ #sidebar{
+  left: 0;
+}
+#sidebar .title{
+  line-height: 65px;
+  text-align: center;
+  background: #333;
+  font-size: 25px;
+  font-weight: 600;
+  color: #f2f2f2;
+  border-bottom: 1px solid #222;
+}
+#sidebar .list-items{
+  position: relative;
+  background: #404040;
+  width: 100%;
+  height: 100%;
+  list-style: none;
+}
+#sidebar .list-items li{
+  padding-left: 40px;
+  line-height: 50px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid #333;
+  transition: all 0.3s ease;
+}
+#sidebar .list-items li:hover{
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: 0 0px 10px 3px #222;
+}
+#sidebar .list-items li:first-child{
+  border-top: none;
+}
+#sidebar .list-items li a{
+  color: #f2f2f2;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+#sidebar .list-items li a i{
+  margin-right: 20px;
+}
+#sidebar .list-items .icons{
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  position: absolute;
+  bottom: 100px;
+  line-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#sidebar .list-items .icons a{
+  height: 100%;
+  width: 40px;
+  display: block;
+  margin: 0 5px;
+  font-size: 18px;
+  color: #f2f2f2;
+  background: #4a4a4a;
+  border-radius: 5px;
+  border: 1px solid #383838;
+  transition: all 0.3s ease;
+}
+#sidebar .list-items .icons a:hover{
+  background: #404040;
+}
+.list-items .icons a:first-child{
+  margin-left: 0px;
+}
+.content{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: #202020;
+  z-index: -1;
+  width: 100%;
+  text-align: center;
+}
+.content .header{
+  font-size: 45px;
+  font-weight: 700;
+}
+.content p{
+  font-size: 40px;
+  font-weight: 700;
+}
+/* General Styles */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+/* Container for centering content */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Card styling */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header inside the card */
+.card-header {
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  color: white;
+  font-size: 0.875rem; /* Further reduced font size */
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 2px solid #0056b3;
+}
+
+/* Light button styling */
+.btn-light {
+  font-size: 0.7rem; /* Further reduced font size */
+  color: #007bff;
+  font-weight: bold;
+  border: 1px solid #007bff;
+  padding: 4px 10px; /* Reduced padding */
+  border-radius: 5px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Button hover effects */
+.btn-light:hover {
+  background: #007bff;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Table Styling */
+.table {
+  margin: 15px auto;
+  width: 100%;
+  max-width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px; /* Further reduced padding */
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+  font-size: 0.8rem; /* Further reduced font size */
+}
+
+/* Header Cell Styling */
+.table th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Hover effect for table rows */
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s ease;
+}
+
+/* Modal Styling */
+.modal-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border-bottom: 2px solid #0056b3;
+}
+
+/* Modal footer */
+.modal-footer .btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 6px 12px; /* Reduced padding */
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.modal-footer .btn-primary:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Input fields */
+input[type="text"],
+input[type="datetime-local"],
+select.form-select,
+textarea.form-control {
+  width: 100%;
+  padding: 8px; /* Further reduced padding */
+  margin-bottom: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border 0.3s ease;
+}
+
+/* Input focus effect */
+input[type="text"]:focus,
+input[type="datetime-local"]:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .container {
+    width: 95%;
+  }
+
+  .card-header {
+    font-size: 0.875rem;
+    padding: 8px;
+  }
+
+  .table th,
+  .table td {
+    padding: 6px;
+  }
+
+  .btn-light {
+    padding: 4px 8px;
+    font-size: 0.65rem;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 95%;
+  }
+
+  .table th,
+  .table td {
+    font-size: 0.50rem; /* Further reduced font size */
+    padding: 6px;
+  }
+
+  .btn-light {
+    padding: 4px 6px;
+    font-size: 0.6rem;
+  }
+
+  .card-header {
+    font-size: 0.8rem;
+  }
+
+  .modal-header,
+  .modal-footer {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 576px) {
+  .table th,
+  .table td {
+    font-size: 0.2rem; /* Further reduced font size for very small screens */
+    padding: 4px;
+  }
+
+  .card-header {
+    font-size: 0.75rem;
+  }
+
+  .btn-light {
+    padding: 4px 5px;
+    font-size: 0.55rem;
+  }
+}
