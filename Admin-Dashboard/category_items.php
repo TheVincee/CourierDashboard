@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Item</title>
-    <!-- Bootstrap CSS -->
+    <title>Admin Items</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container my-5">
         <h2 class="text-center mb-4">Admin Items</h2>
 
-        <!-- Button to trigger modal -->
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">
-            Add Item
-        </button>
+        <!-- Button to trigger Add Item Modal -->
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addItemModal">Add Item</button>
 
-        <!-- Table to display items -->
+        <!-- Items Table -->
         <table class="table table-bordered mt-4">
             <thead>
                 <tr>
@@ -32,132 +29,189 @@
                 </tr>
             </thead>
             <tbody id="itemTableBody">
-                <!-- Dynamic table rows will appear here after form submission -->
+                <!-- Dynamic Rows -->
             </tbody>
         </table>
     </div>
 
-    <!-- Modal for adding items -->
-    <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addItemModalLabel">Add Item to Admin Items</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="itemForm" novalidate>
-                        <div class="mb-3">
+  <!-- Add Item Modal -->
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addItemModalLabel">Add Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="itemForm" novalidate>
+                    <div class="row">
+                        <!-- Rider Selection -->
+                        <div class="col-md-6 mb-3">
+                            <label for="rider" class="form-label">Rider</label>
+                            <select id="rider" class="form-select" required>
+                                <option value="" selected disabled>Choose a rider</option>
+                                <?php
+                                foreach ($riders as $rider) {
+                                    echo '<option value="' . htmlspecialchars($rider['id']) . '">' . htmlspecialchars($rider['first_name']) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <!-- Item Name -->
+                        <div class="col-md-6 mb-3">
                             <label for="itemName" class="form-label">Item Name</label>
                             <input type="text" class="form-control" id="itemName" name="item_name" required placeholder="Enter item name">
-                            <div class="invalid-feedback">Please enter a valid item name.</div>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Quantity -->
+                        <div class="col-md-6 mb-3">
                             <label for="quantity" class="form-label">Quantity</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" required min="1" placeholder="Enter quantity">
-                            <div class="invalid-feedback">Please enter a valid quantity (at least 1).</div>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Destination -->
+                        <div class="col-md-6 mb-3">
                             <label for="destination" class="form-label">Destination</label>
                             <input type="text" class="form-control" id="destination" name="destination" required placeholder="Enter destination">
-                            <div class="invalid-feedback">Please enter a valid destination.</div>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Item Load -->
+                        <div class="col-md-6 mb-3">
                             <label for="itemLoad" class="form-label">Item Load (kg)</label>
                             <input type="number" class="form-control" id="itemLoad" name="item_load" required min="0" step="0.01" placeholder="Enter item load">
-                            <div class="invalid-feedback">Please enter a valid load (at least 0).</div>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Distance -->
+                        <div class="col-md-6 mb-3">
                             <label for="distance" class="form-label">Distance (km)</label>
                             <input type="number" class="form-control" id="distance" name="distance" required min="0" step="0.01" placeholder="Enter distance">
-                            <div class="invalid-feedback">Please enter a valid distance (at least 0).</div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="fuelConsumptionRate" class="form-label">Fuel Consumption Rate (liters/10 km)</label>
+                        <!-- Fuel Consumption Rate -->
+                        <div class="col-md-6 mb-3">
+                            <label for="fuelConsumptionRate" class="form-label">Fuel Consumption Rate</label>
                             <input type="number" class="form-control" id="fuelConsumptionRate" name="fuel_consumption_rate" value="1.0" readonly>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="totalFuelNeeded" class="form-label">Total Fuel Needed (liters)</label>
+                        <!-- Total Fuel Needed -->
+                        <div class="col-md-6 mb-3">
+                            <label for="totalFuelNeeded" class="form-label">Total Fuel Needed</label>
                             <input type="number" class="form-control" id="totalFuelNeeded" name="total_fuel_needed" readonly>
                         </div>
 
-                        <div class="mb-3">
+                        <!-- Total Cost -->
+                        <div class="col-md-6 mb-3">
                             <label for="totalCost" class="form-label">Total Cost (₱)</label>
                             <input type="number" class="form-control" id="totalCost" name="total_cost" readonly>
                         </div>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Add Item</button>
-                    </form>
-                </div>
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                </form>
             </div>
         </div>
     </div>
-<!-- Modal for editing an item -->
+</div>
+
+  <!-- Edit Item Modal -->
 <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editItemForm" novalidate>
-                        <!-- Form fields for editing item -->
-                        <div class="mb-3">
-                            <label for="editItemName" class="form-label">Item Name</label>
-                            <input type="text" class="form-control" id="editItemName" name="item_name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editQuantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="editQuantity" name="quantity" required min="1">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDestination" class="form-label">Destination</label>
-                            <input type="text" class="form-control" id="editDestination" name="destination" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editItemLoad" class="form-label">Item Load (kg)</label>
-                            <input type="number" class="form-control" id="editItemLoad" name="item_load" required min="0" step="0.01">
-                        </div>
-                        <div class="mb-3">
-                            <label for="editDistance" class="form-label">Distance (km)</label>
-                            <input type="number" class="form-control" id="editDistance" name="distance" required min="0" step="0.01">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
-                    </form>
-                </div>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </div>
-    </div>
-     <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteItemModalLabel">Delete Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete this item?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Bootstrap JS & jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="modal-body">
+                <form id="editItemForm" novalidate>
+                    <input type="hidden" id="editItemId" name="item_id">
+                    <div class="row">
+                        <!-- Rider Selection -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editRider" class="form-label">Rider</label>
+                            <select id="editRider" class="form-select" name="rider" required>
+                                <option value="" selected disabled>Choose a rider</option>
+                                <?php
+                                foreach ($riders as $rider) {
+                                    echo '<option value="' . htmlspecialchars($rider['id']) . '">' . htmlspecialchars($rider['first_name']) . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
 
+                        <!-- Item Name -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editItemName" class="form-label">Item Name</label>
+                            <input type="text" class="form-control" id="editItemName" name="item_name" required placeholder="Enter item name">
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editQuantity" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="editQuantity" name="quantity" required min="1" placeholder="Enter quantity">
+                        </div>
+
+                        <!-- Destination -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editDestination" class="form-label">Destination</label>
+                            <input type="text" class="form-control" id="editDestination" name="destination" required placeholder="Enter destination">
+                        </div>
+
+                        <!-- Item Load -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editItemLoad" class="form-label">Item Load (kg)</label>
+                            <input type="number" class="form-control" id="editItemLoad" name="item_load" required min="0" step="0.01" placeholder="Enter item load">
+                        </div>
+
+                        <!-- Distance -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editDistance" class="form-label">Distance (km)</label>
+                            <input type="number" class="form-control" id="editDistance" name="distance" required min="0" step="0.01" placeholder="Enter distance">
+                        </div>
+
+                        <!-- Fuel Consumption Rate -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editFuelConsumptionRate" class="form-label">Fuel Consumption Rate</label>
+                            <input type="number" class="form-control" id="editFuelConsumptionRate" name="fuel_consumption_rate" value="1.0" readonly>
+                        </div>
+
+                        <!-- Total Fuel Needed -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editTotalFuelNeeded" class="form-label">Total Fuel Needed</label>
+                            <input type="number" class="form-control" id="editTotalFuelNeeded" name="total_fuel_needed" readonly>
+                        </div>
+
+                        <!-- Total Cost -->
+                        <div class="col-md-6 mb-3">
+                            <label for="editTotalCost" class="form-label">Total Cost (₱)</label>
+                            <input type="number" class="form-control" id="editTotalCost" name="total_cost" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Delete Item Modal -->
+    <div class="modal fade" id="deleteItemModal" tabindex="-1" aria-labelledby="deleteItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Confirmation Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    const fuelCostPerLiter = 75; // Define fuel cost per liter in pesos
+const fuelCostPerLiter = 75; // Define fuel cost per liter in pesos
 const fuelConsumptionPer10Km = 1.0; // Predefined fuel consumption rate
 
 // Calculate Fuel and Cost
@@ -364,8 +418,6 @@ $(document).on('click', '.btn-danger', function() {
         });
     }
 });
-
-</script>
-
+    </script>
 </body>
 </html>
