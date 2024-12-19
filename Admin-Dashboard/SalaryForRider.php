@@ -12,9 +12,18 @@
 
         <!-- Salary Calculation Form -->
         <form id="salaryForm" novalidate>
+            
             <div class="mb-3">
                 <label for="riderId" class="form-label">Rider ID</label>
-                <input type="text" class="form-control" id="riderId" placeholder="Enter rider ID" required>
+                <input type="text" class="form-control" id="riderId" placeholder="Enter Rider ID" required>
+            </div>
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" readonly>
             </div>
             <div class="mb-3">
                 <label for="itemsDelivered" class="form-label">Items Delivered</label>
@@ -42,64 +51,96 @@
 
     <script>
         $(document).ready(function () {
-    $('#salaryForm').on('submit', function (event) {
-        event.preventDefault();
+            $('#riderId').on('blur', function () {
+                const riderId = $(this).val().trim();
 
-        // Form validation
-        if (!this.checkValidity()) {
-            this.classList.add('was-validated');
-            return;
-        }
-
-        // Retrieve input values
-        const riderId = $('#riderId').val().trim();
-        const itemsDelivered = parseInt($('#itemsDelivered').val()) || 0;
-        const distanceTraveled = parseFloat($('#distanceTraveled').val()) || 0;
-        const extraMiles = parseFloat($('#extraMiles').val()) || 0;
-
-        // Ensure required fields are filled
-        if (!riderId) {
-            alert('Rider ID is required.');
-            return;
-        }
-
-        // Display loading message
-        $('#totalSalary').text('Calculating...');
-
-        // AJAX request to calculate salary
-        $.ajax({
-            url: 'calculate_salary.php', // Backend endpoint
-            type: 'POST',
-            data: {
-                riderId: riderId,
-                itemsDelivered: itemsDelivered,
-                distanceTraveled: distanceTraveled,
-                extraMiles: extraMiles
-            },
-            dataType: 'json', // Expect JSON response
-            success: function (response) {
-                if (response.success) {
-                    // Update salary display
-                    $('#totalSalary').text(`₱${response.totalSalary}`);
+                if (riderId) {
+                    // Fetch rider's first and last name from the database
+                    $.ajax({
+                        url: 'get_rider_details.php', // Backend endpoint to fetch rider details
+                        type: 'GET',
+                        data: { riderId: riderId },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success) {
+                                // Populate the first and last name fields
+                                $('#firstName').val(response.firstName);
+                                $('#lastName').val(response.lastName);
+                            } else {
+                                // Show error message if rider not found
+                                alert('Rider not found!');
+                                $('#firstName').val('');
+                                $('#lastName').val('');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX Error:', status, error);
+                            alert('An error occurred while fetching rider details.');
+                        }
+                    });
                 } else {
-                    // Show error message from backend
-                    alert('Error: ' + response.message);
-                    $('#totalSalary').text('₱0.00');
+                    $('#firstName').val('');
+                    $('#lastName').val('');
                 }
-            },
-            error: function (xhr, status, error) {
-                // Log error details for debugging
-                console.error('AJAX Error:', status, error);
-                console.error('Response Text:', xhr.responseText);
+            });
 
-                // Show a user-friendly error message
-                alert('An error occurred while calculating salary. Please try again.');
-                $('#totalSalary').text('₱0.00');
-            }
+            $('#salaryForm').on('submit', function (event) {
+                event.preventDefault();
+
+                // Form validation
+                if (!this.checkValidity()) {
+                    this.classList.add('was-validated');
+                    return;
+                }
+
+                // Retrieve input values
+                const riderId = $('#riderId').val().trim();
+                const itemsDelivered = parseInt($('#itemsDelivered').val()) || 0;
+                const distanceTraveled = parseFloat($('#distanceTraveled').val()) || 0;
+                const extraMiles = parseFloat($('#extraMiles').val()) || 0;
+
+                // Ensure required fields are filled
+                if (!riderId) {
+                    alert('Rider ID is required.');
+                    return;
+                }
+
+                // Display loading message
+                $('#totalSalary').text('Calculating...');
+
+                // AJAX request to calculate salary
+                $.ajax({
+                    url: 'calculate_salary.php', // Backend endpoint
+                    type: 'POST',
+                    data: {
+                        riderId: riderId,
+                        itemsDelivered: itemsDelivered,
+                        distanceTraveled: distanceTraveled,
+                        extraMiles: extraMiles
+                    },
+                    dataType: 'json', // Expect JSON response
+                    success: function (response) {
+                        if (response.success) {
+                            // Update salary display
+                            $('#totalSalary').text(`₱${response.totalSalary}`);
+                        } else {
+                            // Show error message from backend
+                            alert('Error: ' + response.message);
+                            $('#totalSalary').text('₱0.00');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Log error details for debugging
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response Text:', xhr.responseText);
+
+                        // Show a user-friendly error message
+                        alert('An error occurred while calculating salary. Please try again.');
+                        $('#totalSalary').text('₱0.00');
+                    }
+                });
+            });
         });
-    });
-});
-
     </script>
 </body>
 </html>
