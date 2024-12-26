@@ -30,7 +30,7 @@
                     <i class="uil uil-estate"></i>
                     <span class="link-name">Dahsboard</span>
                 </a></li>
-                <li><a href="#">
+                <li><a href="category_items.php">
                     <i class="uil uil-files-landscapes"></i>
                     <span class="link-name">Content</span>
                 </a></li>

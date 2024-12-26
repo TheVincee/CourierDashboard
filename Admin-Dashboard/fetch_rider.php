@@ -17,7 +17,8 @@ if ($conn->connect_error) {
     exit;
 }
 
-$sql = "SELECT id, first_name, last_name, email, contact, vehicle_type, username FROM riders";
+// Updated SQL query to include the additional fields: password, role, created_at
+$sql = "SELECT riders_id, first_name, last_name, email, contact, vehicle_type, username, password, role, created_at FROM riders";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
