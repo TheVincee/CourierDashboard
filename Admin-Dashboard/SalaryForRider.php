@@ -3,140 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rider Salary Calculation</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Rider Salary Calculator</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="container mt-5">
-        <h2>Rider Salary Calculation</h2>
+    <h1>Rider Salary Calculator</h1>
 
-        <!-- Salary Calculation Form -->
-        <form id="salaryForm" novalidate>
-            
-            <div class="mb-3">
-                <label for="riderId" class="form-label">Rider ID</label>
-                <input type="text" class="form-control" id="riderId" placeholder="Enter Rider ID" required>
-            </div>
-            <div class="mb-3">
-                <label for="firstName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="lastName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="itemsDelivered" class="form-label">Items Delivered</label>
-                <input type="number" class="form-control" id="itemsDelivered" placeholder="Enter items delivered" required>
-            </div>
-            <div class="mb-3">
-                <label for="distanceTraveled" class="form-label">Distance Traveled (km)</label>
-                <input type="number" class="form-control" id="distanceTraveled" placeholder="Enter distance traveled" required>
-            </div>
-            <div class="mb-3">
-                <label for="extraMiles" class="form-label">Extra Miles (for bonus)</label>
-                <input type="number" class="form-control" id="extraMiles" placeholder="Enter extra miles" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Calculate Salary</button>
-        </form>
+    <button id="fetchRiders">Fetch Riders</button>
 
-        <!-- Salary Display -->
-        <div class="mt-4">
-            <h4>Total Salary: <span id="totalSalary">₱0.00</span></h4>
-        </div>
-    </div>
+    <form id="salaryForm">
+        <label for="riderId">Select Rider:</label>
+        <select id="riderId" name="riderId">
+            <option value="">Select Rider</option>
+        </select>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <br><br>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" readonly>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" readonly>
+
+        <br><br>
+
+        <label for="itemsDelivered">Items Delivered:</label>
+        <input type="number" id="itemsDelivered" name="itemsDelivered" min="0">
+
+        <label for="distanceTraveled">Distance Traveled (km):</label>
+        <input type="number" id="distanceTraveled" name="distanceTraveled" step="0.1" min="0">
+
+        <label for="extraMiles">Extra Miles:</label>
+        <input type="number" id="extraMiles" name="extraMiles" step="0.1" min="0">
+
+        <br><br>
+
+        <p>Total Salary: <span id="totalSalary">₱0.00</span></p>
+
+        <button type="submit">Calculate and Save Salary</button>
+    </form>
 
     <script>
         $(document).ready(function () {
-            $('#riderId').on('blur', function () {
-                const riderId = $(this).val().trim();
+            const baseSalary = 5000;
+            const perItemRate = 50;
+            const perKmRate = 10;
+            const bonusRate = 5;
 
-                if (riderId) {
-                    // Fetch rider's first and last name from the database
+            $('#fetchRiders').on('click', function () {
+                $.ajax({
+                    url: 'getriderSalary.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            const riders = response.riders;
+                            let options = '<option value="">Select Rider</option>';
+                            riders.forEach(rider => {
+                                options += `<option value="${rider.riders_id}">${rider.first_name} ${rider.last_name}</option>`;
+                            });
+                            $('#riderId').html(options);
+                        } else {
+                            alert(response.message);
+                            $('#riderId').html('<option value="">No riders available</option>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', xhr.responseText, { status, error });
+                        alert('Failed to fetch riders. Please try again.');
+                    }
+                });
+            });
+
+            $('#riderId').on('change', function () {
+                const riderID = $(this).val().trim();
+                if (riderID) {
                     $.ajax({
-                        url: 'get_rider_details.php', // Backend endpoint to fetch rider details
+                        url: 'getriderSalary.php',
                         type: 'GET',
-                        data: { riderId: riderId },
+                        data: { ridersId: riderID },
                         dataType: 'json',
                         success: function (response) {
                             if (response.success) {
-                                // Populate the first and last name fields
-                                $('#firstName').val(response.firstName);
-                                $('#lastName').val(response.lastName);
+                                const rider = response.rider;
+                                $('#firstName').val(rider.first_name);
+                                $('#lastName').val(rider.last_name);
                             } else {
-                                // Show error message if rider not found
-                                alert('Rider not found!');
-                                $('#firstName').val('');
-                                $('#lastName').val('');
+                                alert(response.message);
+                                $('#firstName, #lastName').val('');
                             }
                         },
                         error: function (xhr, status, error) {
-                            console.error('AJAX Error:', status, error);
-                            alert('An error occurred while fetching rider details.');
+                            console.error('AJAX Error:', xhr.responseText, { status, error });
+                            alert('Failed to fetch rider details. Please try again.');
                         }
                     });
                 } else {
-                    $('#firstName').val('');
-                    $('#lastName').val('');
+                    $('#firstName, #lastName').val('');
                 }
             });
 
             $('#salaryForm').on('submit', function (event) {
                 event.preventDefault();
 
-                // Form validation
-                if (!this.checkValidity()) {
-                    this.classList.add('was-validated');
-                    return;
-                }
-
-                // Retrieve input values
-                const riderId = $('#riderId').val().trim();
+                const riderID = $('#riderId').val().trim();
+                const firstName = $('#firstName').val().trim();
+                const lastName = $('#lastName').val().trim();
                 const itemsDelivered = parseInt($('#itemsDelivered').val()) || 0;
                 const distanceTraveled = parseFloat($('#distanceTraveled').val()) || 0;
                 const extraMiles = parseFloat($('#extraMiles').val()) || 0;
 
-                // Ensure required fields are filled
-                if (!riderId) {
-                    alert('Rider ID is required.');
+                if (!riderID || !firstName || !lastName) {
+                    alert('Rider ID, First Name, and Last Name are required.');
                     return;
                 }
 
-                // Display loading message
-                $('#totalSalary').text('Calculating...');
+                const totalSalary = baseSalary + (itemsDelivered * perItemRate) +
+                    (distanceTraveled * perKmRate) + (extraMiles * bonusRate);
 
-                // AJAX request to calculate salary
+                $('#totalSalary').text(`₱${totalSalary.toFixed(2)}`);
+
                 $.ajax({
-                    url: 'calculate_salary.php', // Backend endpoint
+                    url: 'insert_salary.php',
                     type: 'POST',
                     data: {
-                        riderId: riderId,
+                        riderId: riderID,
+                        firstName: firstName,
+                        lastName: lastName,
                         itemsDelivered: itemsDelivered,
                         distanceTraveled: distanceTraveled,
-                        extraMiles: extraMiles
+                        extraMiles: extraMiles,
+                        totalSalary: totalSalary
                     },
-                    dataType: 'json', // Expect JSON response
+                    dataType: 'json',
                     success: function (response) {
                         if (response.success) {
-                            // Update salary display
-                            $('#totalSalary').text(`₱${response.totalSalary}`);
+                            alert('Salary calculated and inserted successfully.');
                         } else {
-                            // Show error message from backend
                             alert('Error: ' + response.message);
-                            $('#totalSalary').text('₱0.00');
                         }
                     },
                     error: function (xhr, status, error) {
-                        // Log error details for debugging
-                        console.error('AJAX Error:', status, error);
-                        console.error('Response Text:', xhr.responseText);
-
-                        // Show a user-friendly error message
-                        alert('An error occurred while calculating salary. Please try again.');
-                        $('#totalSalary').text('₱0.00');
+                        console.error('AJAX Error:', xhr.responseText, { status, error });
+                        alert('An error occurred while inserting salary. Please try again.');
                     }
                 });
             });
