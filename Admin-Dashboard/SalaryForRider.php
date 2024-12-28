@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rider Salary Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 </head>
 <body>
     <h1>Rider Salary Calculator</h1>
@@ -13,28 +15,28 @@
 
     <form id="salaryForm">
         <label for="riderId">Select Rider:</label>
-        <select id="riderId" name="riderId">
+        <select id="riderId" name="riderId" required>
             <option value="">Select Rider</option>
         </select>
 
         <br><br>
 
         <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" readonly>
+        <input type="text" id="firstName" name="firstName" readonly required>
 
         <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" readonly>
+        <input type="text" id="lastName" name="lastName" readonly required>
 
         <br><br>
 
         <label for="itemsDelivered">Items Delivered:</label>
-        <input type="number" id="itemsDelivered" name="itemsDelivered" min="0">
+        <input type="number" id="itemsDelivered" name="itemsDelivered" min="0" required>
 
         <label for="distanceTraveled">Distance Traveled (km):</label>
-        <input type="number" id="distanceTraveled" name="distanceTraveled" step="0.1" min="0">
+        <input type="number" id="distanceTraveled" name="distanceTraveled" step="0.1" min="0" required>
 
         <label for="extraMiles">Extra Miles:</label>
-        <input type="number" id="extraMiles" name="extraMiles" step="0.1" min="0">
+        <input type="number" id="extraMiles" name="extraMiles" step="0.1" min="0" required>
 
         <br><br>
 
@@ -113,8 +115,8 @@
                 const distanceTraveled = parseFloat($('#distanceTraveled').val()) || 0;
                 const extraMiles = parseFloat($('#extraMiles').val()) || 0;
 
-                if (!riderID || !firstName || !lastName) {
-                    alert('Rider ID, First Name, and Last Name are required.');
+                if (!riderID || !firstName || !lastName || itemsDelivered < 0 || distanceTraveled < 0 || extraMiles < 0) {
+                    alert('All fields are required and must be valid.');
                     return;
                 }
 
@@ -138,7 +140,11 @@
                     dataType: 'json',
                     success: function (response) {
                         if (response.success) {
-                            alert('Salary calculated and inserted successfully.');
+                            toastr.success('Salary is ready to claim!', 'Notification', {
+                                onclick: function() {
+                                    window.location.href = 'NotificationSalary.php';
+                                }
+                            });
                         } else {
                             alert('Error: ' + response.message);
                         }

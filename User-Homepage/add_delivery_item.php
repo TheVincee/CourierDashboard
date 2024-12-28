@@ -17,6 +17,8 @@ try {
 
     // Get and decode JSON data from the request
     $data = json_decode(file_get_contents('php://input'), true);
+
+    // Check if data is received, if not, send an error response
     if (!$data) {
         sendResponse('Error: No data received');
     }
@@ -27,10 +29,15 @@ try {
         'destination', 'pickupTime', 'paymentType', 'description', 'specificationDescription'
     ];
 
+    $missingFields = [];
     foreach ($requiredFields as $field) {
-        if (empty($data[$field])) {
-            sendResponse("Error: $field is required");
+        if (!isset($data[$field]) || trim($data[$field]) === '') {
+            $missingFields[] = $field;
         }
+    }
+
+    if (!empty($missingFields)) {
+        sendResponse('Error: Missing required fields', $missingFields);
     }
 
     // Validate email format
@@ -38,69 +45,57 @@ try {
         sendResponse('Error: Invalid email format');
     }
 
-    // Sanitize and trim pickupTime
+    // Validate and format pickupTime
     $pickupTime = trim($data['pickupTime']);
-
-    // Debugging: Check the received pickupTime
-    error_log("Received pickupTime: " . $pickupTime);
-
-    // Check if pickupTime has both date and time in the correct format
-    if (empty($pickupTime) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $pickupTime)) {
+    if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $pickupTime)) {
         sendResponse("Error: Invalid pickup time format. Please use 'Y-m-d H:i:s'. Example: 2024-12-11 14:30:00");
     }
 
-    // Validate and reformat pickupTime using DateTime
-    try {
-        $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $pickupTime);
-        $errors = DateTime::getLastErrors();
-
-        // If there are errors in the date format, send error message
-        if ($errors['error_count'] > 0 || $errors['warning_count'] > 0 || !$dateTime) {
-            sendResponse("Error: Invalid pickup time format. Please use 'Y-m-d H:i:s'. Example: 2024-12-11 14:30:00");
-        }
-
-        // Correct the pickup time format to be sure it's inserted correctly
-        $pickupTime = $dateTime->format('Y-m-d H:i:s'); // Ensure the format is correct
-    } catch (Exception $e) {
-        sendResponse("Error: Invalid pickup time. Exception: " . $e->getMessage());
+    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $pickupTime);
+    $errors = DateTime::getLastErrors();
+    if ($errors['error_count'] > 0 || $errors['warning_count'] > 0 || !$dateTime) {
+        sendResponse("Error: Invalid pickup time format. Please use 'Y-m-d H:i:s'. Example: 2024-12-11 14:30:00");
     }
+    $pickupTime = $dateTime->format('Y-m-d H:i:s'); // Ensure valid format
 
-    // Prepare the SQL query
+    // Generate a unique tracking ID
+    $trackingID = uniqid('TRK-', true);
+
+    // Prepare SQL query
     $query = "
         INSERT INTO delivery_items 
         (
             senderName, receiverName, senderEmail, senderPhone, 
             destination, pickupTime, paymentType, description, specificationDescription, 
-            status, created_at, updated_at
+            status, created_at, updated_at, trackingID
         ) 
         VALUES 
         (
             :senderName, :receiverName, :senderEmail, :senderPhone, 
             :destination, :pickupTime, :paymentType, :description, :specificationDescription, 
-            :status, NOW(), NOW()
+            :status, NOW(), NOW(), :trackingID
         )
     ";
 
-    // Prepare the statement
+    // Prepare and execute the statement
     $stmt = $conn->prepare($query);
-
-    // Bind parameters
     $params = [
-        ':senderName' => $data['senderName'],
-        ':receiverName' => $data['receiverName'],
-        ':senderEmail' => $data['senderEmail'],
-        ':senderPhone' => $data['senderPhone'],
-        ':destination' => $data['destination'],
+        ':senderName' => trim($data['senderName']),
+        ':receiverName' => trim($data['receiverName']),
+        ':senderEmail' => trim($data['senderEmail']),
+        ':senderPhone' => trim($data['senderPhone']),
+        ':destination' => trim($data['destination']),
         ':pickupTime' => $pickupTime,
-        ':paymentType' => $data['paymentType'],
-        ':description' => $data['description'],
-        ':specificationDescription' => $data['specificationDescription'],
-        ':status' => $data['status'] ?? 'Pending',  // Default status if not provided
+        ':paymentType' => trim($data['paymentType']),
+        ':description' => trim($data['description']),
+        ':specificationDescription' => trim($data['specificationDescription']),
+        ':status' => $data['status'] ?? 'Pending',  // Default to 'Pending' if status is not provided
+        ':trackingID' => $trackingID
     ];
 
-    // Execute the query
+    // Execute the SQL statement
     if ($stmt->execute($params)) {
-        sendResponse('Item added successfully');
+        sendResponse('Item added successfully', ['trackingID' => $trackingID]);
     } else {
         $errorInfo = $stmt->errorInfo();
         error_log("Insert Error: " . print_r($errorInfo, true));
