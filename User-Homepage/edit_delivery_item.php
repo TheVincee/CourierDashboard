@@ -50,6 +50,11 @@ try {
         sendResponse('Error: Invalid email format');
     }
 
+    // If phone number is provided, check if it's non-empty (no format validation required)
+    if (isset($data['senderPhone']) && trim($data['senderPhone']) === '') {
+        sendResponse('Error: Phone number cannot be empty');
+    }
+
     // Validate and format pickupTime
     $pickupTime = trim($data['pickupTime']);
     if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $pickupTime)) {

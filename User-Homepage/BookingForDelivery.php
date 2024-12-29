@@ -145,78 +145,76 @@
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="modal">
+<div id="editModal" class="modal fade" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('editModal')">&times;</span>
-        <h2>Edit Delivery Item</h2>
-        <form id="editForm" method="post">
-            <input type="hidden" id="editId" name="id">
-            
-            <!-- Modal Form Structure -->
-            <div class="modal-form">
-                <!-- Sender Name and Receiver Name -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="senderName">Sender Name:</label>
-                        <input type="text" id="editSenderName" name="senderName" required>
-                    </div>
-                    <div class="modal-column">
-                        <label for="receiverName">Receiver Name:</label>
-                        <input type="text" id="editReceiverName" name="receiverName" required>
-                    </div>
-                </div>
-
-                <!-- Sender Email and Pickup Time -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="senderEmail">Sender Email:</label>
-                        <input type="email" id="editSenderEmail" name="senderEmail" required>
-                    </div>
-                    <div class="modal-column">
-                        <label for="pickupTime">Pickup Time:</label>
-                        <input type="datetime-local" id="editPickupTime" name="pickupTime" required>
-                    </div>
-                </div>
-
-                <!-- Destination -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="destination">Destination:</label>
-                        <input type="text" id="editDestination" name="destination" required>
-                    </div>
-                </div>
-
-                <!-- Description as Dropdown -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="description">Description:</label>
-                        <select id="editDescription" name="description" required>
-                            <option value="">Select Description</option>
-                            <option value="Fragile">Fragile</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Clothes">Clothes</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Specification Description -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="specificationDescription">Specification Description:</label>
-                        <textarea id="editSpecificationDescription" name="specificationDescription" rows="4" required></textarea>
-                    </div>
-                </div>
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Delivery Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editForm" method="post">
+        <div class="modal-body">
+          <input type="hidden" id="editId" name="id">
+          
+          <!-- Modal Form Structure -->
+          <div class="row g-3">
+            <!-- Sender Name and Receiver Name -->
+            <div class="col-md-6">
+              <label for="editSenderName" class="form-label">Sender Name</label>
+              <input type="text" class="form-control" id="editSenderName" name="senderName" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editReceiverName" class="form-label">Receiver Name</label>
+              <input type="text" class="form-control" id="editReceiverName" name="receiverName" required>
             </div>
 
-            <!-- Footer with Save and Cancel buttons -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success">Save Changes</button>
-                <button type="button" class="btn btn-danger" onclick="closeModal('editModal')">Cancel</button>
+            <!-- Sender Email and Pickup Time -->
+            <div class="col-md-6">
+              <label for="editSenderEmail" class="form-label">Sender Email</label>
+              <input type="email" class="form-control" id="editSenderEmail" name="senderEmail" required>
             </div>
-        </form>
+            <div class="col-md-6">
+              <label for="editPickupTime" class="form-label">Pickup Time</label>
+              <input type="datetime-local" class="form-control" id="editPickupTime" name="pickupTime" required>
+            </div>
+
+            <!-- Sender Phone and Destination -->
+            <div class="col-md-6">
+              <label for="editSenderPhone" class="form-label">Sender Phone</label>
+              <input type="tel" class="form-control" id="editSenderPhone" name="senderPhone" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editDestination" class="form-label">Destination</label>
+              <input type="text" class="form-control" id="editDestination" name="destination" required>
+            </div>
+
+            <!-- Description as Dropdown -->
+            <div class="col-md-12">
+              <label for="editDescription" class="form-label">Description</label>
+              <select class="form-select" id="editDescription" name="description" required>
+                <option value="" disabled selected>Select Description</option>
+                <option value="Fragile">Fragile</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothes">Clothes</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- Specification Description -->
+            <div class="col-md-12">
+              <label for="editSpecificationDescription" class="form-label">Specification Description</label>
+              <textarea class="form-control" id="editSpecificationDescription" name="specificationDescription" rows="4" required></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 <!-- Cancellation Modal -->
 <div id="cancelModal" class="modal">
@@ -254,204 +252,237 @@
       </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </div>
   
   <script>
-  $(document).ready(function () {
-    // Load delivery items on page load
-    loadDeliveryItems();
+$(document).ready(function () {
+  // Load delivery items on page load
+  loadDeliveryItems();
 
-    // Add a delivery item
-    $('#addDeliveryItemForm').on('submit', function (e) {
-      e.preventDefault();
+  // Add a delivery item
+  $('#addDeliveryItemForm').on('submit', function (e) {
+    e.preventDefault();
 
-      // Validate form inputs
-      if (!validateForm('#addDeliveryItemForm')) {
-        alert('Please fill out all required fields.');
-        return;
-      }
-
-      // Prepare form data
-      const formData = getFormData('#addDeliveryItemForm');
-      
-      // Ensure pickupTime is formatted correctly
-      if (!formData.pickupTime) {
-        alert('Please provide a valid pickup time.');
-        return;
-      }
-
-      formData.pickupTime = formatDateForAjax(formData.pickupTime);
-
-      // Send data using AJAX
-      $.ajax({
-        url: 'add_delivery_item.php',
-        method: 'POST',
-        data: JSON.stringify(formData),
-        contentType: 'application/json',
-        success: function (response) {
-          handleAjaxResponse(response, 'Item added successfully!', 'Failed to add item.');
-        },
-        error: function (xhr, status, error) {
-          console.error('AJAX Error:', status, error);
-          alert('Error adding item. Please check your connection and try again.');
-        }
-      });
-    });
-
-    // Load delivery items
-    function loadDeliveryItems() {
-      $.ajax({
-        url: 'get_delivery_items.php',
-        method: 'GET',
-        success: function (response) {
-          try {
-            const items = typeof response === 'string' ? JSON.parse(response) : response;
-
-            if (!Array.isArray(items)) {
-              alert('Invalid data format received.');
-              return;
-            }
-
-            const tableRows = items.map(item => createTableRow(item)).join('');
-            $('#deliveryItemsTable').html(tableRows); // Update the table body
-          } catch (error) {
-            console.error('Error parsing response:', error);
-            alert('An error occurred while loading delivery items.');
-          }
-        },
-        error: function () {
-          alert('Error loading delivery items. Please check your connection and try again.');
-        }
-      });
+    // Validate form inputs
+    if (!validateForm('#addDeliveryItemForm')) {
+      alert('Please fill out all required fields.');
+      return;
     }
 
-    // Create table row for a delivery item
-    function createTableRow(item) {
-      const formatValue = (value) => value && value.trim() !== '' ? value : 'N/A';
-
-      return `
-        <tr>
-          <td>${formatValue(item.id)}</td>
-          <td>${formatValue(item.senderName)}</td>
-          <td>${formatValue(item.receiverName)}</td>
-          <td>${formatValue(item.senderEmail)}</td>
-          <td>${formatValue(item.senderPhone)}</td>
-          <td>${formatValue(item.destination)}</td>
-          <td>${formatValue(item.pickupTime)}</td>
-          <td>${formatValue(item.paymentType)}</td>
-          <td>${formatValue(item.description)}</td>
-          <td>${formatValue(item.specificationDescription)}</td>
-          <td>${formatValue(item.status || 'Pending')}</td>
-          <td>
-            <button class="btn btn-sm btn-primary viewItemBtn" data-id="${item.id}">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="btn btn-sm btn-warning editItemBtn" data-id="${item.id}">
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button class="btn btn-sm btn-danger deleteItemBtn" data-id="${item.id}">
-              <i class="fas fa-trash"></i>
-            </button>
-          </td>
-        </tr>`;
+    // Prepare form data
+    const formData = getFormData('#addDeliveryItemForm');
+    
+    // Ensure pickupTime is formatted correctly
+    if (!formData.pickupTime) {
+      alert('Please provide a valid pickup time.');
+      return;
     }
 
-// Attach an event listener to the Edit button
-$(document).on('click', '.editItemBtn', function () {
-    const itemId = $(this).data('id'); // Get the item ID from the button's data attribute
+    formData.pickupTime = formatDateForAjax(formData.pickupTime);
 
-    // Log to verify the item ID
-    console.log("Item ID:", itemId);
-
-    // Make an AJAX request to fetch item details based on the item ID
+    // Send data using AJAX
     $.ajax({
-        url: 'getDeliveryItemDetails.php', // PHP file to fetch item details
-        method: 'GET',
-        data: { id: itemId }, // Send the ID to the PHP script
-        dataType: 'json', // Expect a JSON response
-        success: function (response) {
-            // Log the response from PHP to check if it's correct
-            console.log("Response:", response);
-
-            // Check if the request was successful
-            if (response.success) {
-                // Populate the modal form fields with the fetched data
-                const item = response.data[0]; // Since you're fetching one item, take the first item from the array
-
-                $('#editId').val(item.id);
-                $('#editSenderName').val(item.senderName);
-                $('#editReceiverName').val(item.receiverName);
-                $('#editSenderEmail').val(item.senderEmail);
-                $('#editSenderPhone').val(item.senderPhone);
-                $('#editDestination').val(item.destination);
-                $('#editPickupTime').val(item.pickupTime);
-                $('#editDescription').val(item.description);
-                $('#editSpecificationDescription').val(item.specificationDescription);
-
-                // Open the modal (assuming you're using a modal to edit the item)
-                $('#editModal').show(); // You can modify this to your modal opening function
-            } else {
-                alert('Error: ' + response.error);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', status, error);
-            alert('Error fetching delivery item details. Please try again.');
-        }
+      url: 'add_delivery_item.php',
+      method: 'POST',
+      data: JSON.stringify(formData),
+      contentType: 'application/json',
+      success: function (response) {
+        console.log('Response:', response); // Debugging step
+        handleAjaxResponse(response, 'Item added successfully!', 'Failed to add item.');
+      },
+      error: function (xhr, status, error) {
+        console.error('AJAX Error:', status, error);
+        alert('Error adding item. Please check your connection and try again.');
+      }
     });
-});
-
-// Update item via AJAX when the form is submitted
-$('#editForm').on('submit', function (e) {
-    e.preventDefault(); // Prevent the form from submitting normally
-
-    const formData = {
-        id: $('#editId').val(),
-        senderName: $('#editSenderName').val(),
-        receiverName: $('#editReceiverName').val(),
-        senderEmail: $('#editSenderEmail').val(),
-        senderPhone: $('#editSenderPhone').val(),
-        destination: $('#editDestination').val(),
-        pickupTime: $('#editPickupTime').val(),
-        description: $('#editDescription').val(),
-        specificationDescription: $('#editSpecificationDescription').val()
-    };
-
-    // Log form data to verify
-    console.log("Form Data:", formData);
-
-    // Make an AJAX request to update the item
-    $.ajax({
-        url: 'edit_delivery_item.php', // PHP file to handle item update
-        method: 'POST',
-        data: formData, // Send the form data to the server
-        dataType: 'json', // Expect a JSON response
-        success: function (response) {
-            // Log the response from PHP to check if it's correct
-            console.log("Update Response:", response);
-
-            // Check if the update was successful
-            if (response.success) {
-                // Close the modal
-                $('#editModal').hide(); // You can modify this to your modal closing function
-
-                // Optionally, refresh the table or show a success message
-                alert('Item updated successfully!');
-                location.reload(); // Reload the page to reflect changes (or you can refresh the table data dynamically)
-            } else {
-                alert('Error: ' + response.error);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', status, error);
-            alert('Error updating delivery item. Please try again.');
-        }
-    });
-});
-
-
   });
 
+  // Load delivery items
+  function loadDeliveryItems() {
+    $.ajax({
+      url: 'get_delivery_items.php',
+      method: 'GET',
+      success: function (response) {
+        try {
+          const items = typeof response === 'string' ? JSON.parse(response) : response;
 
+          if (!Array.isArray(items)) {
+            alert('Invalid data format received.');
+            return;
+          }
+
+          const tableRows = items.map(item => createTableRow(item)).join('');
+          $('#deliveryItemsTable').html(tableRows); // Update the table body
+        } catch (error) {
+          console.error('Error parsing response:', error);
+          alert('An error occurred while loading delivery items.');
+        }
+      },
+      error: function () {
+        alert('Error loading delivery items. Please check your connection and try again.');
+      }
+    });
+  }
+
+  // Create table row for a delivery item
+  function createTableRow(item) {
+    const formatValue = (value) => value && value.trim() !== '' ? value : 'N/A';
+
+    return `
+      <tr>
+        <td>${formatValue(item.id)}</td>
+        <td>${formatValue(item.senderName)}</td>
+        <td>${formatValue(item.receiverName)}</td>
+        <td>${formatValue(item.senderEmail)}</td>
+        <td>${formatValue(item.senderPhone)}</td>
+        <td>${formatValue(item.destination)}</td>
+        <td>${formatValue(item.pickupTime)}</td>
+        <td>${formatValue(item.paymentType)}</td>
+        <td>${formatValue(item.description)}</td>
+        <td>${formatValue(item.specificationDescription)}</td>
+        <td>${formatValue(item.status || 'Pending')}</td>
+        <td>
+          <button class="btn btn-sm btn-primary viewItemBtn" data-id="${item.id}">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="btn btn-sm btn-warning editItemBtn" data-id="${item.id}">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn btn-sm btn-danger deleteItemBtn" data-id="${item.id}">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+  }
+
+  // Edit item logic
+  $(document).on('click', '.editItemBtn', function () {
+    const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
+
+    $.ajax({
+      url: 'getDeliveryItemDetails.php',
+      method: 'GET',
+      data: { id: itemId },
+      dataType: 'json',
+      success: function (response) {
+        if (response.status === 'success') {
+          // Populate form fields with the fetched data
+          $('#editId').val(response.data.id);
+          $('#editSenderName').val(response.data.senderName);
+          $('#editReceiverName').val(response.data.receiverName);
+          $('#editSenderEmail').val(response.data.senderEmail);
+          $('#editSenderPhone').val(response.data.senderPhone);
+          $('#editDestination').val(response.data.destination);
+          $('#editPickupTime').val(response.data.pickupTime);
+          $('#editDescription').val(response.data.description);
+          $('#editSpecificationDescription').val(response.data.specificationDescription);
+          $('#editModal').modal('show'); // Show the modal for editing
+        } else {
+          alert(response.message || 'Error fetching delivery item details.');
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error('AJAX Error:', status, error);
+        alert('Error fetching delivery item details. Please try again.');
+      }
+    });
+  });
+
+  // Update item logic
+  $('#editForm').on('submit', function (e) {
+    e.preventDefault();
+
+    if (!validateForm('#editForm')) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
+    const formData = {
+      id: $('#editId').val(),
+      senderName: $('#editSenderName').val(),
+      receiverName: $('#editReceiverName').val(),
+      senderEmail: $('#editSenderEmail').val(),
+      senderPhone: $('#editSenderPhone').val(),
+      destination: $('#editDestination').val(),
+      pickupTime: formatDateForAjax($('#editPickupTime').val()),
+      description: $('#editDescription').val(),
+      specificationDescription: $('#editSpecificationDescription').val(),
+      status: 'Pending', // Assuming status is 'Pending'
+    };
+
+    $.ajax({
+      url: 'edit_delivery_item.php',
+      method: 'POST',
+      data: JSON.stringify(formData),
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function (response) {
+        handleAjaxResponse(response, 'Item updated successfully!', 'Failed to update item.');
+      },
+      error: function (xhr, status, error) {
+        console.error('AJAX Error:', status, error);
+        alert('Error updating item. Please check your connection and try again.');
+      }
+    });
+  });
+
+  // Helper function to validate form inputs
+  function validateForm(formSelector) {
+    let isValid = true;
+    $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
+      if ($(this).prop('required') && $(this).val() === '') {
+        $(this).css('border', '1px solid red'); // Highlight invalid fields
+        isValid = false;
+      } else {
+        $(this).css('border', ''); // Reset border if valid
+      }
+    });
+    return isValid;
+  }
+
+  // Helper function to format date for AJAX
+  function formatDateForAjax(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const hours = String(d.getHours()).padStart(2, '0');
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const seconds = String(d.getSeconds()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  }
+
+  // Helper function to handle AJAX responses
+  function handleAjaxResponse(response, successMessage, errorMessage) {
+    if (response.status === 'success') {
+      alert(successMessage);
+      loadDeliveryItems(); // Reload the table to reflect changes
+      $('#editModal').modal('hide'); // Close the modal after successful update
+    } else {
+      alert(response.message || errorMessage);
+    }
+  }
+
+  // Helper function to get form data
+  function getFormData(formSelector) {
+    const formData = {};
+    $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
+      formData[$(this).attr('name')] = $(this).val();
+    });
+    return formData;
+  }
+
+  // Close modal
+  $(document).on('click', '.close', function () {
+    $('#editModal').modal('hide'); // Hide modal when close button is clicked
+  });
+
+  $(window).on('click', function (event) {
+    if ($(event.target).hasClass('modal')) {
+      $('#editModal').modal('hide'); // Close modal if user clicks outside of it
+    }
+  });
+});
 </script>
   
 
