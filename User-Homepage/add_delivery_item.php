@@ -1,111 +1,36 @@
 <?php
-// Database connection details
-$host = 'localhost';
-$dbname = 'courier_db';
-$username = 'root';
-$password = '';
+include('db.php');  // Ensure your DB connection is correct
 
-function sendResponse($message, $data = null) {
-    echo json_encode(['message' => $message, 'data' => $data]);
-    exit;
-}
+// Get the raw POST data
+$data = json_decode(file_get_contents('php://input'), true);
 
-try {
-    // Establish database connection using PDO
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if (isset($data['senderName'], $data['receiverName'], $data['senderEmail'], $data['senderPhone'], $data['destination'], $data['pickupTime'], $data['paymentType'], $data['description'], $data['specificationDescription'])) {
+    $senderName = $data['senderName'];
+    $receiverName = $data['receiverName'];
+    $senderEmail = $data['senderEmail'];
+    $senderPhone = $data['senderPhone'];
+    $destination = $data['destination'];
+    $pickupTime = $data['pickupTime'];
+    $paymentType = $data['paymentType'];
+    $description = $data['description'];
+    $specificationDescription = $data['specificationDescription'];
+    $status = 'Pending'; // Default status
 
-    // Get and decode JSON data from the request
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    // Check if data is received, if not, send an error response
-    if (!$data) {
-        sendResponse('Error: No data received');
-    }
-
-    // Validate required fields
-    $requiredFields = [
-        'senderName', 'receiverName', 'senderEmail', 'senderPhone',
-        'destination', 'pickupTime', 'paymentType', 'description', 'specificationDescription'
-    ];
-
-    $missingFields = [];
-    foreach ($requiredFields as $field) {
-        if (!isset($data[$field]) || trim($data[$field]) === '') {
-            $missingFields[] = $field;
-        }
-    }
-
-    if (!empty($missingFields)) {
-        sendResponse('Error: Missing required fields', $missingFields);
-    }
-
-    // Validate email format
-    if (!filter_var($data['senderEmail'], FILTER_VALIDATE_EMAIL)) {
-        sendResponse('Error: Invalid email format');
-    }
-
-    // Validate and format pickupTime
-    $pickupTime = trim($data['pickupTime']);
-    if (!preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $pickupTime)) {
-        sendResponse("Error: Invalid pickup time format. Please use 'Y-m-d H:i:s'. Example: 2024-12-11 14:30:00");
-    }
-
-    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $pickupTime);
-    $errors = DateTime::getLastErrors();
-    if ($errors['error_count'] > 0 || $errors['warning_count'] > 0 || !$dateTime) {
-        sendResponse("Error: Invalid pickup time format. Please use 'Y-m-d H:i:s'. Example: 2024-12-11 14:30:00");
-    }
-    $pickupTime = $dateTime->format('Y-m-d H:i:s'); // Ensure valid format
-
-    // Generate a unique tracking ID
-    $trackingID = uniqid('TRK-', true);
-
-    // Prepare SQL query
-    $query = "
-        INSERT INTO delivery_items 
-        (
-            senderName, receiverName, senderEmail, senderPhone, 
-            destination, pickupTime, paymentType, description, specificationDescription, 
-            status, created_at, updated_at, trackingID
-        ) 
-        VALUES 
-        (
-            :senderName, :receiverName, :senderEmail, :senderPhone, 
-            :destination, :pickupTime, :paymentType, :description, :specificationDescription, 
-            :status, NOW(), NOW(), :trackingID
-        )
-    ";
-
-    // Prepare and execute the statement
+    // Insert the data into the database
+    $query = "INSERT INTO delivery_items (senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, paymentType, description, specificationDescription, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $params = [
-        ':senderName' => trim($data['senderName']),
-        ':receiverName' => trim($data['receiverName']),
-        ':senderEmail' => trim($data['senderEmail']),
-        ':senderPhone' => trim($data['senderPhone']),
-        ':destination' => trim($data['destination']),
-        ':pickupTime' => $pickupTime,
-        ':paymentType' => trim($data['paymentType']),
-        ':description' => trim($data['description']),
-        ':specificationDescription' => trim($data['specificationDescription']),
-        ':status' => $data['status'] ?? 'Pending',  // Default to 'Pending' if status is not provided
-        ':trackingID' => $trackingID
-    ];
+    $stmt->bind_param("ssssssssss", $senderName, $receiverName, $senderEmail, $senderPhone, $destination, $pickupTime, $paymentType, $description, $specificationDescription, $status);
 
-    // Execute the SQL statement
-    if ($stmt->execute($params)) {
-        sendResponse('Item added successfully', ['trackingID' => $trackingID]);
+    if ($stmt->execute()) {
+        echo json_encode(['status' => 'success', 'message' => 'Item added successfully']);
     } else {
-        $errorInfo = $stmt->errorInfo();
-        error_log("Insert Error: " . print_r($errorInfo, true));
-        sendResponse('Error adding item', $errorInfo[2]);
+        echo json_encode(['status' => 'error', 'message' => 'Failed to add item']);
     }
-} catch (PDOException $e) {
-    error_log("PDO Error: " . $e->getMessage());
-    sendResponse('Database error', $e->getMessage());
-} catch (Exception $e) {
-    error_log("General Error: " . $e->getMessage());
-    sendResponse('Error', $e->getMessage());
+
+    $stmt->close();
+} else {
+    echo json_encode(['status' => 'error', 'message' => 'Invalid input data']);
 }
+
+$conn->close();
 ?>
