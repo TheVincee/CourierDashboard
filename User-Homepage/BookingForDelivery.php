@@ -218,7 +218,6 @@
         </form>
     </div>
 </div>
-
 <!-- Cancellation Modal -->
 <div id="cancelModal" class="modal">
     <div class="modal-content">
@@ -255,172 +254,202 @@
       </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    </div>
   
   <script>
-$(document).ready(function () {
-  // Load delivery items on page load
-  loadDeliveryItems();
+  $(document).ready(function () {
+    // Load delivery items on page load
+    loadDeliveryItems();
 
-  // Add a delivery item
-  $('#addDeliveryItemForm').on('submit', function (e) {
-    e.preventDefault();
+    // Add a delivery item
+    $('#addDeliveryItemForm').on('submit', function (e) {
+      e.preventDefault();
 
-    // Validate form inputs
-    if (!validateForm('#addDeliveryItemForm')) {
-      alert('Please fill out all required fields.');
-      return;
-    }
-
-    // Prepare form data
-    const formData = getFormData('#addDeliveryItemForm');
-    
-    // Log form data for debugging
-    console.log('Form Data:', formData);
-
-    // Ensure pickupTime is formatted correctly
-    if (!formData.pickupTime) {
-      alert('Please provide a valid pickup time.');
-      return;
-    }
-
-    formData.pickupTime = formatDateForAjax(formData.pickupTime);
-
-    // Log formatted data for debugging
-    console.log('Formatted Form Data:', formData);
-
-    // Send data using AJAX
-    $.ajax({
-      url: 'add_delivery_item.php', // Adjust to your server path
-      method: 'POST',
-      data: JSON.stringify(formData),
-      contentType: 'application/json',
-      success: function (response) {
-        console.log('Server Response:', response); // Log server response for debugging
-        handleAjaxResponse(response, 'Item added successfully!', 'Failed to add item.');
-      },
-      error: function (xhr, status, error) {
-        console.error('AJAX Error:', status, error); // Log AJAX error for debugging
-        alert('Error adding item. Please check your connection and try again.');
+      // Validate form inputs
+      if (!validateForm('#addDeliveryItemForm')) {
+        alert('Please fill out all required fields.');
+        return;
       }
-    });
-  });
 
-  // Other functions (editItem, viewItem, deleteItem, etc.) remain unchanged
+      // Prepare form data
+      const formData = getFormData('#addDeliveryItemForm');
+      
+      // Ensure pickupTime is formatted correctly
+      if (!formData.pickupTime) {
+        alert('Please provide a valid pickup time.');
+        return;
+      }
+
+      formData.pickupTime = formatDateForAjax(formData.pickupTime);
+
+      // Send data using AJAX
+      $.ajax({
+        url: 'add_delivery_item.php',
+        method: 'POST',
+        data: JSON.stringify(formData),
+        contentType: 'application/json',
+        success: function (response) {
+          handleAjaxResponse(response, 'Item added successfully!', 'Failed to add item.');
+        },
+        error: function (xhr, status, error) {
+          console.error('AJAX Error:', status, error);
+          alert('Error adding item. Please check your connection and try again.');
+        }
+      });
+    });
+
+    // Load delivery items
+    function loadDeliveryItems() {
+      $.ajax({
+        url: 'get_delivery_items.php',
+        method: 'GET',
+        success: function (response) {
+          try {
+            const items = typeof response === 'string' ? JSON.parse(response) : response;
+
+            if (!Array.isArray(items)) {
+              alert('Invalid data format received.');
+              return;
+            }
+
+            const tableRows = items.map(item => createTableRow(item)).join('');
+            $('#deliveryItemsTable').html(tableRows); // Update the table body
+          } catch (error) {
+            console.error('Error parsing response:', error);
+            alert('An error occurred while loading delivery items.');
+          }
+        },
+        error: function () {
+          alert('Error loading delivery items. Please check your connection and try again.');
+        }
+      });
+    }
+
+    // Create table row for a delivery item
+    function createTableRow(item) {
+      const formatValue = (value) => value && value.trim() !== '' ? value : 'N/A';
+
+      return `
+        <tr>
+          <td>${formatValue(item.id)}</td>
+          <td>${formatValue(item.senderName)}</td>
+          <td>${formatValue(item.receiverName)}</td>
+          <td>${formatValue(item.senderEmail)}</td>
+          <td>${formatValue(item.senderPhone)}</td>
+          <td>${formatValue(item.destination)}</td>
+          <td>${formatValue(item.pickupTime)}</td>
+          <td>${formatValue(item.paymentType)}</td>
+          <td>${formatValue(item.description)}</td>
+          <td>${formatValue(item.specificationDescription)}</td>
+          <td>${formatValue(item.status || 'Pending')}</td>
+          <td>
+            <button class="btn btn-sm btn-primary viewItemBtn" data-id="${item.id}">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-warning editItemBtn" data-id="${item.id}">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button class="btn btn-sm btn-danger deleteItemBtn" data-id="${item.id}">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>`;
+    }
+
+// Attach an event listener to the Edit button
+$(document).on('click', '.editItemBtn', function () {
+    const itemId = $(this).data('id'); // Get the item ID from the button's data attribute
+
+    // Log to verify the item ID
+    console.log("Item ID:", itemId);
+
+    // Make an AJAX request to fetch item details based on the item ID
+    $.ajax({
+        url: 'getDeliveryItemDetails.php', // PHP file to fetch item details
+        method: 'GET',
+        data: { id: itemId }, // Send the ID to the PHP script
+        dataType: 'json', // Expect a JSON response
+        success: function (response) {
+            // Log the response from PHP to check if it's correct
+            console.log("Response:", response);
+
+            // Check if the request was successful
+            if (response.success) {
+                // Populate the modal form fields with the fetched data
+                const item = response.data[0]; // Since you're fetching one item, take the first item from the array
+
+                $('#editId').val(item.id);
+                $('#editSenderName').val(item.senderName);
+                $('#editReceiverName').val(item.receiverName);
+                $('#editSenderEmail').val(item.senderEmail);
+                $('#editSenderPhone').val(item.senderPhone);
+                $('#editDestination').val(item.destination);
+                $('#editPickupTime').val(item.pickupTime);
+                $('#editDescription').val(item.description);
+                $('#editSpecificationDescription').val(item.specificationDescription);
+
+                // Open the modal (assuming you're using a modal to edit the item)
+                $('#editModal').show(); // You can modify this to your modal opening function
+            } else {
+                alert('Error: ' + response.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+            alert('Error fetching delivery item details. Please try again.');
+        }
+    });
 });
 
-// Helper function to validate form inputs
-function validateForm(formSelector) {
-  let isValid = true;
-  $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
-    if ($(this).prop('required') && $(this).val() === '') {
-      console.log('Validation failed for:', $(this).attr('name')); // Log the field that failed validation
-      isValid = false;
-    }
-  });
-  return isValid;
-}
+// Update item via AJAX when the form is submitted
+$('#editForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent the form from submitting normally
 
-// Helper function to format pickup time for AJAX as 'Y-m-d H:i:s'
-function formatDateForAjax(date) {
-  if (!date) return ''; // If no date is provided, return an empty string
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  const seconds = String(d.getSeconds()).padStart(2, '0');
+    const formData = {
+        id: $('#editId').val(),
+        senderName: $('#editSenderName').val(),
+        receiverName: $('#editReceiverName').val(),
+        senderEmail: $('#editSenderEmail').val(),
+        senderPhone: $('#editSenderPhone').val(),
+        destination: $('#editDestination').val(),
+        pickupTime: $('#editPickupTime').val(),
+        description: $('#editDescription').val(),
+        specificationDescription: $('#editSpecificationDescription').val()
+    };
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
+    // Log form data to verify
+    console.log("Form Data:", formData);
 
-// Helper function to fetch form data
-function getFormData(formSelector) {
-  const data = {};
-  $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
-    const fieldName = $(this).attr('name');
-    const fieldValue = $(this).val();
-    data[fieldName] = fieldValue;
-  });
-  return data;
-}
+    // Make an AJAX request to update the item
+    $.ajax({
+        url: 'edit_delivery_item.php', // PHP file to handle item update
+        method: 'POST',
+        data: formData, // Send the form data to the server
+        dataType: 'json', // Expect a JSON response
+        success: function (response) {
+            // Log the response from PHP to check if it's correct
+            console.log("Update Response:", response);
 
-// Helper function to handle AJAX responses
-function handleAjaxResponse(response, successMessage, errorMessage) {
-  try {
-    const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+            // Check if the update was successful
+            if (response.success) {
+                // Close the modal
+                $('#editModal').hide(); // You can modify this to your modal closing function
 
-    if (jsonResponse.message === 'Item added successfully') {
-      alert(successMessage);
-      $('#addItemModal').modal('hide');
-      loadDeliveryItems(); // Reload the delivery items table
-    } else {
-      alert(jsonResponse.message || errorMessage);
-    }
-  } catch (error) {
-    console.error('Error parsing response:', error);
-    alert('An error occurred. Please try again.');
-  }
-}
-
-// Load delivery items
-function loadDeliveryItems() {
-  $.ajax({
-    url: 'get_delivery_items.php',
-    method: 'GET',
-    success: function (response) {
-      try {
-        const items = typeof response === 'string' ? JSON.parse(response) : response;
-
-        if (!Array.isArray(items)) {
-          alert('Invalid data format received.');
-          return;
+                // Optionally, refresh the table or show a success message
+                alert('Item updated successfully!');
+                location.reload(); // Reload the page to reflect changes (or you can refresh the table data dynamically)
+            } else {
+                alert('Error: ' + response.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+            alert('Error updating delivery item. Please try again.');
         }
+    });
+});
 
-        const tableRows = items.map(item => createTableRow(item)).join('');
-        $('#deliveryItemsTable').html(tableRows); // Update the table body
-      } catch (error) {
-        console.error('Error parsing response:', error);
-        alert('An error occurred while loading delivery items.');
-      }
-    },
-    error: function () {
-      alert('Error loading delivery items. Please check your connection and try again.');
-    }
+
   });
-}
-
-// Create table row for a delivery item
-function createTableRow(item) {
-  const formatValue = (value) => value && value.trim() !== '' ? value : 'N/A';
-
-  return `
-    <tr>
-      <td>${formatValue(item.id)}</td>
-      <td>${formatValue(item.senderName)}</td>
-      <td>${formatValue(item.receiverName)}</td>
-      <td>${formatValue(item.senderEmail)}</td>
-      <td>${formatValue(item.senderPhone)}</td>
-      <td>${formatValue(item.destination)}</td>
-      <td>${formatValue(item.pickupTime)}</td>
-      <td>${formatValue(item.paymentType)}</td>
-      <td>${formatValue(item.description)}</td>
-      <td>${formatValue(item.specificationDescription)}</td>
-      <td>${formatValue(item.status || 'Pending')}</td>
-      <td>
-        <button class="btn btn-sm btn-primary viewItemBtn" data-id="${item.id}">
-          <i class="fas fa-eye"></i>
-        </button>
-        <button class="btn btn-sm btn-warning editItemBtn" data-id="${item.id}">
-          <i class="fas fa-pencil-alt"></i>
-        </button>
-        <button class="btn btn-sm btn-danger deleteItemBtn" data-id="${item.id}">
-          <i class="fas fa-trash"></i>
-        </button>
-      </td>
-    </tr>`;
-}
 
 
 </script>
