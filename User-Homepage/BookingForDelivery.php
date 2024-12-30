@@ -217,39 +217,124 @@
   </div>
 </div>
 <!-- Cancellation Modal -->
-<div id="cancelModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal('cancelModal')">&times;</span>
-        <h2>Cancel Delivery Item</h2>
-        <form id="cancelForm" method="post">
-            <input type="hidden" id="cancelId" name="id">
-            
-            <!-- Modal Form Structure -->
-            <div class="modal-form">
-                <!-- Sender Name -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="senderName">Sender Name:</label>
-                        <input type="text" id="cancelSenderName" name="senderName" readonly>
+<div id="cancelModal" class="modal fade" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelModalLabel">Cancel Delivery Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="cancelForm" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="cancelId" name="id">
+                    
+                    <!-- Modal Form Structure -->
+                    <div class="row g-3">
+                        <!-- Sender Name -->
+                        <div class="col-md-6">
+                            <label for="cancelSenderName" class="form-label">Sender Name</label>
+                            <input type="text" class="form-control" id="cancelSenderName" name="senderName" readonly>
+                        </div>
+
+                        <!-- Tracking ID -->
+                        <div class="col-md-6">
+                            <label for="cancelTrackingID" class="form-label">Tracking ID</label>
+                            <input type="text" class="form-control" id="cancelTrackingID" name="trackingID" readonly>
+                        </div>
+
+                        <!-- Cancellation Reason -->
+                        <div class="col-md-12">
+                            <label for="cancelReason" class="form-label">Reason for Cancellation</label>
+                            <textarea class="form-control" id="cancelReason" name="reason" rows="3" placeholder="Enter the reason for cancellation" required></textarea>
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Confirm Cancellation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-                <!-- Receiver Name -->
-                <div class="modal-row">
-                    <div class="modal-column">
-                        <label for="receiverName">Receiver Name:</label>
-                        <input type="text" id="cancelReceiverName" name="receiverName" readonly>
+<!-- View Modal -->
+<div id="viewModal" class="modal fade" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewModalLabel">View Delivery Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <!-- Sender Name -->
+                    <div class="col-md-6">
+                        <label for="viewSenderName" class="form-label">Sender Name</label>
+                        <input type="text" class="form-control" id="viewSenderName" readonly>
+                    </div>
+
+                    <!-- Receiver Name -->
+                    <div class="col-md-6">
+                        <label for="viewReceiverName" class="form-label">Receiver Name</label>
+                        <input type="text" class="form-control" id="viewReceiverName" readonly>
+                    </div>
+
+                    <!-- Sender Email -->
+                    <div class="col-md-6">
+                        <label for="viewSenderEmail" class="form-label">Sender Email</label>
+                        <input type="email" class="form-control" id="viewSenderEmail" readonly>
+                    </div>
+
+                    <!-- Sender Phone -->
+                    <div class="col-md-6">
+                        <label for="viewSenderPhone" class="form-label">Sender Phone</label>
+                        <input type="tel" class="form-control" id="viewSenderPhone" readonly>
+                    </div>
+
+                    <!-- Destination -->
+                    <div class="col-md-6">
+                        <label for="viewDestination" class="form-label">Destination</label>
+                        <input type="text" class="form-control" id="viewDestination" readonly>
+                    </div>
+
+                    <!-- Pickup Time -->
+                    <div class="col-md-6">
+                        <label for="viewPickupTime" class="form-label">Pickup Time</label>
+                        <input type="datetime-local" class="form-control" id="viewPickupTime" readonly>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="col-md-12">
+                        <label for="viewDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="viewDescription" readonly>
+                    </div>
+
+                    <!-- Specification Description -->
+                    <div class="col-md-12">
+                        <label for="viewSpecificationDescription" class="form-label">Specification Description</label>
+                        <textarea class="form-control" id="viewSpecificationDescription" rows="3" readonly></textarea>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="col-md-6">
+                        <label for="viewStatus" class="form-label">Status</label>
+                        <input type="text" class="form-control" id="viewStatus" readonly>
+                    </div>
+
+                    <!-- Tracking ID -->
+                    <div class="col-md-6">
+                        <label for="viewTrackingID" class="form-label">Tracking ID</label>
+                        <input type="text" class="form-control" id="viewTrackingID" readonly>
                     </div>
                 </div>
             </div>
-
-            <!-- Footer with Cancel and Confirm buttons -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" onclick="closeModal('cancelModal')">Cancel</button>
-                <button type="submit" class="btn btn-success">Confirm Cancellation</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
-        </form>
-      </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     </div>
@@ -432,8 +517,8 @@ function createTableRow(item) {
         <button class="btn btn-sm btn-warning editItemBtn" data-id="${item.id}">
           <i class="fas fa-pencil-alt"></i>
         </button>
-        <button class="btn btn-sm btn-danger deleteItemBtn" data-id="${item.id}">
-          <i class="fas fa-trash"></i>
+          <button class="btn btn-sm btn-danger cancelItemBtn" data-id="${item.id}">
+            <i class="fas fa-times"></i> 
         </button>
       </td>
     </tr>`;
@@ -580,7 +665,198 @@ function handleAjaxResponse(response, successMessage, errorMessage) {
         alert(errorMessage + " " + (response.message || ''));
     }
 }
+$(document).on('click', '.cancelItemBtn', function () {
+    const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
 
+    // Clear previous modal fields to avoid showing outdated data
+    $('#cancelId').val('');
+    $('#cancelSenderName').val('');
+    $('#cancelReceiverName').val('');
+
+    // Start the AJAX request to fetch the delivery item details
+    $.ajax({
+        url: 'getDeliveryItemDetails.php',
+        method: 'GET',
+        data: { id: itemId },
+        dataType: 'json',
+        success: function (response) {
+            console.log('Full Response:', response); // Log the full response for debugging
+
+            // Check if the response is valid and contains the necessary data
+            if (response.status === 'success' && response.data && response.data.length > 0) {
+                const data = response.data[0]; // Access the first item in the array
+                console.log('Fetched Data:', data); // Log the fetched data for debugging
+
+                // Populate form fields with the fetched data
+                $('#cancelId').val(data.id);
+                $('#cancelSenderName').val(data.senderName);
+                $('#cancelReceiverName').val(data.receiverName);
+
+                // Show the modal for cancelling the delivery item
+                $('#cancelModal').modal('show');
+            } else {
+                alert(response.message || 'No delivery item details found.');
+            }
+        },
+        error: function (xhr, status, error) {
+            // Log AJAX error for debugging
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error fetching delivery item details. Please try again.');
+        }
+    });
+});
+
+$(document).on('click', '.cancelItemBtn', function () {
+    const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
+
+    // Clear previous modal fields to avoid showing outdated data
+    $('#cancelId').val('');
+    $('#cancelSenderName').val('');
+    $('#cancelTrackingID').val('');
+    $('#cancelReason').val('');
+
+    // Start the AJAX request to fetch the delivery item details
+    $.ajax({
+        url: 'getDeliveryItemDetails.php',
+        method: 'GET',
+        data: { id: itemId },
+        dataType: 'json',
+        success: function (response) {
+            console.log('Full Response:', response); // Log the full response for debugging
+
+            // Check if the response is valid and contains the necessary data
+            if (response.status === 'success' && response.data && response.data.length > 0) {
+                const data = response.data[0]; // Access the first item in the array
+                console.log('Fetched Data:', data); // Log the fetched data for debugging
+
+                // Populate form fields with the fetched data
+                $('#cancelId').val(data.id);
+                $('#cancelSenderName').val(data.senderName);
+                $('#cancelTrackingID').val(data.trackingID);
+
+                // Show the modal for cancelling the delivery item
+                $('#cancelModal').modal('show');
+            } else {
+                alert(response.message || 'No delivery item details found.');
+            }
+        },
+        error: function (xhr, status, error) {
+            // Log AJAX error for debugging
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error fetching delivery item details. Please try again.');
+        }
+    });
+});
+
+$('#cancelForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Prepare form data to be sent
+    const formData = {
+        id: $('#cancelId').val(),
+        reason: $('#cancelReason').val()
+    };
+
+    // Send the cancel request
+    $.ajax({
+        url: 'cancelDelivery.php', // Backend endpoint for cancelling
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData), // Send data as JSON
+        success: function (response) {
+            console.log('Cancel Response:', response); // Debug response
+            handleAjaxResponse(response, 'Item cancelled successfully!', 'Failed to cancel item.');
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error cancelling item. Please check your connection and try again.');
+        }
+    });
+});
+
+// Helper function to handle AJAX responses
+function handleAjaxResponse(response, successMessage, errorMessage) {
+    if (response.status === 'success') {
+        alert(successMessage);
+        loadDeliveryItems(); // Reload the table to reflect changes
+        $('#cancelModal').modal('hide'); // Close the modal after successful update
+    } else {
+        alert(response.message || errorMessage);
+    }
+}
+
+// Close modal when clicking the close button
+$(document).on('click', '.close', function () {
+    $('#cancelModal').modal('hide'); // Hide modal
+});
+
+// Close modal if clicked outside the modal
+$(window).on('click', function (event) {
+    if ($(event.target).hasClass('modal')) {
+        $('#cancelModal').modal('hide'); // Close modal if user clicks outside of it
+    }
+});
+$(document).on('click', '.viewItemBtn', function () {
+    const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
+
+    // Debugging: Log the item ID
+    console.log('Item ID:', itemId);
+
+    // Clear previous modal fields to avoid showing outdated data
+    $('#viewSenderName').val('');
+    $('#viewReceiverName').val('');
+    $('#viewSenderEmail').val('');
+    $('#viewSenderPhone').val('');
+    $('#viewDestination').val('');
+    $('#viewPickupTime').val('');
+    $('#viewDescription').val('');
+    $('#viewSpecificationDescription').val('');
+    $('#viewStatus').val('');
+    $('#viewTrackingID').val('');
+
+    // Start the AJAX request to fetch the delivery item details
+    $.ajax({
+        url: 'viewDelivery.php',
+        method: 'GET',
+        data: { id: itemId },
+        dataType: 'json',
+        success: function (response) {
+            console.log('Full Response:', response); // Log the full response for debugging
+
+            // Check if the response is valid and contains the necessary data
+            if (response.status === 'success' && response.data) {
+                const data = response.data; // Access the item data
+                console.log('Fetched Data:', data); // Log the fetched data for debugging
+
+                // Populate form fields with the fetched data
+                $('#viewSenderName').val(data.senderName);
+                $('#viewReceiverName').val(data.receiverName);
+                $('#viewSenderEmail').val(data.senderEmail);
+                $('#viewSenderPhone').val(data.senderPhone);
+                $('#viewDestination').val(data.destination);
+
+                // Handle pickupTime formatting (from 'YYYY-MM-DD HH:MM:SS' to 'YYYY-MM-DDTHH:MM')
+                const pickupTime = data.pickupTime ? data.pickupTime.replace(' ', 'T') : '';
+                $('#viewPickupTime').val(pickupTime);
+
+                $('#viewDescription').val(data.description);
+                $('#viewSpecificationDescription').val(data.specificationDescription);
+                $('#viewStatus').val(data.status || 'Pending'); // Ensure status is not empty
+                $('#viewTrackingID').val(data.trackingID);
+
+                // Show the modal for viewing the delivery item
+                $('#viewModal').modal('show');
+            } else {
+                alert(response.message || 'No delivery item details found.');
+            }
+        },
+        error: function (xhr, status, error) {
+            // Log AJAX error for debugging
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error fetching delivery item details. Please try again.');
+        }
+    });
+});
 </script>
   
 
