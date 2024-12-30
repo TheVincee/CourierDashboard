@@ -5,11 +5,11 @@ include 'db.php';
 // Function to fetch delivery items
 function fetchDeliveryItems($conn, $id = null) {
     if ($id !== null) {
-        // Query to fetch item by ID
-        $query = "SELECT * FROM delivery_items WHERE id = ?";
+        // Query to fetch item by ID, including description field
+        $query = "SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription FROM delivery_items WHERE id = ?";
     } else {
-        // Query to fetch all items
-        $query = "SELECT * FROM delivery_items";
+        // Query to fetch all items, including description field
+        $query = "SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription FROM delivery_items";
     }
 
     // Prepare and execute the SQL query

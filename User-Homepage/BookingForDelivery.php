@@ -348,7 +348,9 @@ function handleAjaxResponse(response, successMessage, errorMessage) {
   try {
     const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
 
-    if (jsonResponse.message === 'Item added successfully') {
+    console.log('Parsed Response:', jsonResponse); // Log parsed response for debugging
+
+    if (jsonResponse.status === 'success') {
       alert(successMessage);
       $('#addItemModal').modal('hide');
       loadDeliveryItems(); // Reload the delivery items table
@@ -364,7 +366,7 @@ function handleAjaxResponse(response, successMessage, errorMessage) {
 // Load delivery items
 function loadDeliveryItems() {
   $.ajax({
-    url: 'get_delivery_items.php',
+    url: 'get_delivery_items.php', // Adjust to your server path
     method: 'GET',
     success: function (response) {
       try {
@@ -382,7 +384,8 @@ function loadDeliveryItems() {
         alert('An error occurred while loading delivery items.');
       }
     },
-    error: function () {
+    error: function (xhr, status, error) {
+      console.error('Error loading delivery items:', status, error);
       alert('Error loading delivery items. Please check your connection and try again.');
     }
   });
@@ -421,96 +424,106 @@ function createTableRow(item) {
 
 
 
-  // Edit item logic
-  $(document).on('click', '.editItemBtn', function () {
+// Edit item logic
+$(document).on('click', '.editItemBtn', function () {
     const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
 
     $.ajax({
-  url: 'getDeliveryItemDetails.php',
-  method: 'GET',
-  data: { id: itemId },
-  dataType: 'json',
-  success: function (response) {
-    console.log('Fetch Response:', response); // Log fetch response for debugging
-    if (response.status === 'success') {
-      // Populate form fields with the fetched data
-      $('#editId').val(response.data.id);
-      $('#editSenderName').val(response.data.senderName);
-      $('#editReceiverName').val(response.data.receiverName);
-      $('#editSenderEmail').val(response.data.senderEmail);
-      $('#editSenderPhone').val(response.data.senderPhone);
-      $('#editDestination').val(response.data.destination);
-      
-      // Check if pickupTime exists and is valid, then format it
-      const pickupTime = response.data.pickupTime ? response.data.pickupTime.replace(' ', 'T') : '';
-      $('#editPickupTime').val(pickupTime);
+        url: 'getDeliveryItemDetails.php', // Backend endpoint to get item details
+        method: 'GET',
+        data: { id: itemId },  // Send the item ID as a GET request parameter
+        dataType: 'json', // Expect a JSON response
+        success: function (response) {
+            console.log('Fetch Response:', response); // Debugging: Log the response to inspect it
 
-      $('#editDescription').val(response.data.description);
-      $('#editSpecificationDescription').val(response.data.specificationDescription);
-      $('#editModal').modal('show'); // Show the modal for editing
-    } else {
-      alert(response.message || 'Error fetching delivery item details.');
-    }
-  },
-  error: function (xhr, status, error) {
-    console.error('AJAX Error:', status, error);
-    alert('Error fetching delivery item details. Please try again.');
-  }
+            if (response.status === 'success' && response.data.length > 0) {
+                const data = response.data[0]; // Access the first item in the array
+                console.log('Fetched Data:', data); // Log the fetched data for inspection
+
+                // Populate form fields with the fetched data
+                $('#editId').val(data.id);
+                $('#editSenderName').val(data.senderName);
+                $('#editReceiverName').val(data.receiverName);
+                $('#editSenderEmail').val(data.senderEmail);
+                $('#editSenderPhone').val(data.senderPhone);
+                $('#editDestination').val(data.destination);
+
+                // Handle pickupTime formatting (from 'YYYY-MM-DD HH:MM:SS' to 'YYYY-MM-DDTHH:MM')
+                const pickupTime = data.pickupTime ? data.pickupTime.replace(' ', 'T') : '';
+                $('#editPickupTime').val(pickupTime);
+
+                // Populate the description and specification description fields with the fetched data
+                $('#editDescription').val(data.description || ''); // Set description field
+                $('#editSpecificationDescription').val(data.specificationDescription || ''); // Set specification description field
+
+                // Show the modal for editing
+                $('#editModal').modal('show');
+            } else {
+                alert(response.message || 'No delivery item details found.');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error fetching delivery item details. Please try again.');
+        }
+    });
 });
 
-  });
+// Update item logic
+$('#editForm').on('submit', function (e) {
+    e.preventDefault(); // Prevent the default form submission
 
-  // Update item logic
-  $('#editForm').on('submit', function (e) {
-    e.preventDefault();
-
+    // Validate the form before submitting
     if (!validateForm('#editForm')) {
-      alert('Please fill out all required fields.');
-      return;
+        alert('Please fill out all required fields.');
+        return;
     }
 
+    // Prepare form data to be sent
     const formData = {
-      id: $('#editId').val(),
-      senderName: $('#editSenderName').val(),
-      receiverName: $('#editReceiverName').val(),
-      senderEmail: $('#editSenderEmail').val(),
-      senderPhone: $('#editSenderPhone').val(),
-      destination: $('#editDestination').val(),
-      pickupTime: formatDateForAjax($('#editPickupTime').val()),
-      description: $('#editDescription').val(),
-      specificationDescription: $('#editSpecificationDescription').val(),
-      status: 'Pending', // Assuming status is 'Pending'
+        id: $('#editId').val(),
+        senderName: $('#editSenderName').val(),
+        receiverName: $('#editReceiverName').val(),
+        senderEmail: $('#editSenderEmail').val(),
+        senderPhone: $('#editSenderPhone').val(),
+        destination: $('#editDestination').val(),
+        pickupTime: formatDateForAjax($('#editPickupTime').val()), // Format date for AJAX
+        description: $('#editDescription').val(), // Get description value
+        specificationDescription: $('#editSpecificationDescription').val(),
+        status: 'Pending', // Assuming status is 'Pending'
     };
 
+    // Send the update request
     $.ajax({
-      url: 'edit_delivery_item.php',
-      method: 'POST',
-      data: formData, // Send data as form data (not JSON)
-      success: function (response) {
-        handleAjaxResponse(response, 'Item updated successfully!', 'Failed to update item.');
-      },
-      error: function (xhr, status, error) {
-        console.error('AJAX Error:', status, error);
-        alert('Error updating item. Please check your connection and try again.');
-      }
+        url: 'edit_delivery_item.php', // Backend endpoint for editing
+        method: 'POST',
+        data: formData, // Send data as form data (not JSON)
+        success: function (response) {
+            console.log('Update Response:', response); // Debug response
+            handleAjaxResponse(response, 'Item updated successfully!', 'Failed to update item.');
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
+            alert('Error updating item. Please check your connection and try again.');
+        }
     });
-  });
+});
 
-  // Helper function to validate form inputs
-  function validateForm(formSelector) {
+// Helper function to validate form inputs
+function validateForm(formSelector) {
     let isValid = true;
     $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
-      $(this).css('border', ''); // Reset the border before checking
-      if ($(this).prop('required') && $(this).val() === '') {
-        $(this).css('border', '1px solid red'); // Highlight invalid fields
-        isValid = false;
-      }
+        $(this).css('border', ''); // Reset the border before checking
+        if ($(this).prop('required') && $(this).val() === '') {
+            $(this).css('border', '1px solid red'); // Highlight invalid fields
+            isValid = false;
+        }
     });
     return isValid;
-  }
+}
 
-  // Helper function to format date for AJAX
-  function formatDateForAjax(date) {
+// Helper function to format date for AJAX
+function formatDateForAjax(date) {
     const d = new Date(date);
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -519,38 +532,31 @@ function createTableRow(item) {
     const minutes = String(d.getMinutes()).padStart(2, '0');
     const seconds = String(d.getSeconds()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  }
+}
 
-  // Helper function to handle AJAX responses
-  function handleAjaxResponse(response, successMessage, errorMessage) {
+// Helper function to handle AJAX responses
+function handleAjaxResponse(response, successMessage, errorMessage) {
     if (response.status === 'success') {
-      alert(successMessage);
-      loadDeliveryItems(); // Reload the table to reflect changes
-      $('#editModal').modal('hide'); // Close the modal after successful update
+        alert(successMessage);
+        loadDeliveryItems(); // Reload the table to reflect changes
+        $('#editModal').modal('hide'); // Close the modal after successful update
     } else {
-      alert(response.message || errorMessage);
+        alert(response.message || errorMessage);
     }
-  }
+}
 
-  // Helper function to get form data
-  function getFormData(formSelector) {
-    const formData = {};
-    $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
-      formData[$(this).attr('name')] = $(this).val();
-    });
-    return formData;
-  }
+// Close modal when clicking the close button
+$(document).on('click', '.close', function () {
+    $('#editModal').modal('hide'); // Hide modal
+});
 
-  // Close modal
-  $(document).on('click', '.close', function () {
-    $('#editModal').modal('hide'); // Hide modal when close button is clicked
-  });
-
-  $(window).on('click', function (event) {
+// Close modal if clicked outside the modal
+$(window).on('click', function (event) {
     if ($(event.target).hasClass('modal')) {
-      $('#editModal').modal('hide'); // Close modal if user clicks outside of it
+        $('#editModal').modal('hide'); // Close modal if user clicks outside of it
     }
-  });
+});
+
 
 </script>
   

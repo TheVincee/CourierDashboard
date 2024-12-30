@@ -6,7 +6,9 @@ $username = 'root';
 $password = '';
 
 function sendResponse($message, $data = null, $status = 'error') {
-    // Outputting the response in a consistent format (message, data, and status)
+    // Log the response
+    error_log("Response: " . json_encode(['status' => $status, 'message' => $message, 'data' => $data]));
+    // Outputting the response in a consistent format
     echo json_encode([
         'status' => $status,
         'message' => $message,
@@ -50,7 +52,7 @@ try {
         sendResponse('Error: Invalid email format');
     }
 
-    // If phone number is provided, check if it's non-empty (no format validation required)
+    // If phone number is provided, check if it's non-empty
     if (isset($data['senderPhone']) && trim($data['senderPhone']) === '') {
         sendResponse('Error: Phone number cannot be empty');
     }
@@ -101,18 +103,25 @@ try {
         ':status' => isset($data['status']) ? $data['status'] : 'Pending'
     ];
 
-    // Execute the statement
+    // Log the query and parameters before executing
+    error_log("Executing SQL: " . $query);
+    error_log("With parameters: " . print_r($params, true));
+
     if ($stmt->execute($params)) {
         sendResponse('Item updated successfully', null, 'success');
     } else {
+        // Log the error information in case of failure
         $errorInfo = $stmt->errorInfo();
         error_log("Update Error: " . print_r($errorInfo, true)); // Log the error
         sendResponse('Error updating item', $errorInfo[2]);
     }
+
 } catch (PDOException $e) {
+    // Log any PDO-specific errors
     error_log("PDO Error: " . $e->getMessage());
     sendResponse('Database error', $e->getMessage());
 } catch (Exception $e) {
+    // Log any general errors
     error_log("General Error: " . $e->getMessage());
     sendResponse('Error', $e->getMessage());
 }
