@@ -1,61 +1,73 @@
 <?php
-// Include your database connection
-include 'db.php';
+header('Content-Type: application/json');
 
-// Function to fetch delivery items
-function fetchDeliveryItems($conn, $id = null) {
-    if ($id !== null) {
-        // Query to fetch item by ID, including description field
-        $query = "SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription FROM delivery_items WHERE id = ?";
-    } else {
-        // Query to fetch all items, including description field
-        $query = "SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription FROM delivery_items";
-    }
+try {
+    // Replace with your actual database credentials
+    $host = 'localhost';  // Database host
+    $dbname = 'courier_db';  // Database name
+    $username = 'root';  // Database username (change if needed)
+    $password = '';  // Database password (if any)
 
-    // Prepare and execute the SQL query
-    if ($stmt = $conn->prepare($query)) {
-        if ($id !== null) {
-            // Bind parameter if fetching a specific item
-            $stmt->bind_param("i", $id);
-        }
+    // Establish PDO connection
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
+    // Check if 'id' is set in the GET request and is numeric
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $id = intval($_GET['id']);
 
-            if ($result->num_rows > 0) {
-                // Fetch all items as an associative array
-                $items = [];
-                while ($row = $result->fetch_assoc()) {
-                    $items[] = $row;
-                }
-                return ['status' => 'success', 'data' => $items]; // Ensuring consistent success response format
-            } else {
-                return ['status' => 'error', 'message' => 'No items found']; // Consistent error format
-            }
+        // Debugging: Log the received ID value
+        error_log('Received ID: ' . $_GET['id']);
+        error_log('Processed ID: ' . $id);
+
+        // Query to fetch details of a single delivery item based on the ID
+        $stmt = $pdo->prepare("SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription, status, trackingID FROM delivery_items WHERE id = ?");
+        $stmt->execute([$id]);
+
+        // Fetch the result
+        $item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($item) {
+            // Return a successful response with item details
+            echo json_encode([
+                'status' => 'success',
+                'data' => [$item]  // Wrapping in an array to match frontend logic
+            ]);
         } else {
-            return ['status' => 'error', 'message' => 'SQL execution failed: ' . $stmt->error]; // Detailed error message
+            // No item found with the given ID
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'No delivery item found.'
+            ]);
         }
-
-        // Close the statement
-        $stmt->close();
     } else {
-        return ['status' => 'error', 'message' => 'SQL prepare failed: ' . $conn->error]; // Detailed error message
+        // If no valid ID is passed, fetch all delivery items
+        // Query to fetch all delivery items
+        $stmt = $pdo->prepare("SELECT id, senderName, receiverName, senderEmail, senderPhone, destination, pickupTime, description, specificationDescription, status, trackingID FROM delivery_items");
+        $stmt->execute();
+
+        // Fetch all results
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($items) {
+            // Return a successful response with all item details
+            echo json_encode([
+                'status' => 'success',
+                'data' => $items
+            ]);
+        } else {
+            // No items found in the database
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'No delivery items found.'
+            ]);
+        }
     }
+} catch (PDOException $e) {
+    // Return error response in case of a database failure
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Error fetching delivery item details: ' . $e->getMessage()
+    ]);
 }
-
-// Check if 'id' is provided and is a valid numeric value
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id = $_GET['id'];  // Get the ID from the GET request
-    $response = fetchDeliveryItems($conn, $id);
-} else {
-    // If no valid ID is provided, fetch all items
-    $response = fetchDeliveryItems($conn);
-}
-
-// Output the response as JSON
-header('Content-Type: application/json'); // Set content type to application/json
-echo json_encode($response);
-
-// Close the connection
-$conn->close();
 ?>

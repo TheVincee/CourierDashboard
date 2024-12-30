@@ -261,7 +261,7 @@ $(document).ready(function () {
 
   // Add a delivery item
   $('#addDeliveryItemForm').on('submit', function (e) {
-    e.preventDefault();
+    e.preventDefault(); // Prevent the default form submission
 
     // Validate form inputs
     if (!validateForm('#addDeliveryItemForm')) {
@@ -272,9 +272,6 @@ $(document).ready(function () {
     // Prepare form data
     const formData = getFormData('#addDeliveryItemForm');
     
-    // Log form data for debugging
-    console.log('Form Data:', formData);
-
     // Ensure pickupTime is formatted correctly
     if (!formData.pickupTime) {
       alert('Please provide a valid pickup time.');
@@ -283,22 +280,25 @@ $(document).ready(function () {
 
     formData.pickupTime = formatDateForAjax(formData.pickupTime);
 
-    // Log formatted data for debugging
-    console.log('Formatted Form Data:', formData);
+    // Disable the submit button to prevent multiple submissions
+    $('#addDeliveryItemForm button[type="submit"]').prop('disabled', true);
 
     // Send data using AJAX
     $.ajax({
       url: 'add_delivery_item.php', // Adjust to your server path
       method: 'POST',
-      data: JSON.stringify(formData),
-      contentType: 'application/json',
+      data: JSON.stringify(formData), // Send data as JSON
+      contentType: 'application/json', // Set content type to JSON
       success: function (response) {
         console.log('Server Response:', response); // Log server response for debugging
-        handleAjaxResponse(response, 'Item added successfully!', 'Failed to add item.');
+        handleAddItemResponse(response);
       },
       error: function (xhr, status, error) {
-        console.error('AJAX Error:', status, error); // Log AJAX error for debugging
-        alert('Error adding item. Please check your connection and try again.');
+        handleAddItemError(xhr, status, error); // Separate error handler for item addition
+      },
+      complete: function () {
+        // Re-enable the submit button after the request completes
+        $('#addDeliveryItemForm button[type="submit"]').prop('disabled', false);
       }
     });
   });
@@ -311,7 +311,6 @@ function validateForm(formSelector) {
   let isValid = true;
   $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
     if ($(this).prop('required') && $(this).val() === '') {
-      console.log('Validation failed for:', $(this).attr('name')); // Log the field that failed validation
       isValid = false;
     }
   });
@@ -343,23 +342,41 @@ function getFormData(formSelector) {
   return data;
 }
 
-// Helper function to handle AJAX responses
-function handleAjaxResponse(response, successMessage, errorMessage) {
+// Helper function to handle AJAX response for adding an item
+function handleAddItemResponse(response) {
   try {
     const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
 
-    console.log('Parsed Response:', jsonResponse); // Log parsed response for debugging
-
     if (jsonResponse.status === 'success') {
-      alert(successMessage);
-      $('#addItemModal').modal('hide');
-      loadDeliveryItems(); // Reload the delivery items table
+      alert('Item added successfully!');
+      $('#addItemModal').modal('hide'); // Hide modal after success
+
+      // Dynamically add the new item to the table without reloading the page
+      const newItemRow = createTableRow(jsonResponse.data);
+      $('#deliveryItemsTable').prepend(newItemRow); // Add the new item at the top of the table
+
+      // Reset the form after submission
+      $('#addDeliveryItemForm')[0].reset();
     } else {
-      alert(jsonResponse.message || errorMessage);
+      alert(jsonResponse.message || 'Failed to add item.');
     }
   } catch (error) {
     console.error('Error parsing response:', error);
-    alert('An error occurred. Please try again.');
+    alert('An error occurred while adding the item. Please try again.');
+  }
+}
+
+// Helper function to handle AJAX errors specifically for item addition
+function handleAddItemError(xhr, status, error) {
+  console.error('AJAX Error (Item Addition):', status, error); // Log AJAX error for debugging
+  if (xhr.status === 0) {
+    alert('Network error. Please check your connection and try again.');
+  } else if (xhr.status === 404) {
+    alert('Requested resource for adding item not found (404). Please try again later.');
+  } else if (xhr.status === 500) {
+    alert('Server error (500) while adding item. Please try again later.');
+  } else {
+    alert('An unexpected error occurred while adding the item. Please try again.');
   }
 }
 
@@ -423,22 +440,36 @@ function createTableRow(item) {
 }
 
 
-
-// Edit item logic
 $(document).on('click', '.editItemBtn', function () {
     const itemId = $(this).data('id'); // Retrieve the item ID from the button's data attribute
 
-    $.ajax({
-        url: 'getDeliveryItemDetails.php', // Backend endpoint to get item details
-        method: 'GET',
-        data: { id: itemId },  // Send the item ID as a GET request parameter
-        dataType: 'json', // Expect a JSON response
-        success: function (response) {
-            console.log('Fetch Response:', response); // Debugging: Log the response to inspect it
+    // Clear previous modal fields to avoid showing outdated data
+    $('#editId').val('');
+    $('#editSenderName').val('');
+    $('#editReceiverName').val('');
+    $('#editSenderEmail').val('');
+    $('#editSenderPhone').val('');
+    $('#editDestination').val('');
+    $('#editPickupTime').val('');
+    $('#editDescription').val('');
+    $('#editSpecificationDescription').val('');
+    $('#editStatus').val('');
+    // No need to reset the tracking ID anymore, so this line is removed
+    // $('#editTrackingID').val(''); 
 
-            if (response.status === 'success' && response.data.length > 0) {
+    // Start the AJAX request to fetch the delivery item details
+    $.ajax({
+        url: 'getDeliveryItemDetails.php',
+        method: 'GET',
+        data: { id: itemId },
+        dataType: 'json',
+        success: function (response) {
+            console.log('Full Response:', response); // Log the full response for debugging
+
+            // Check if the response is valid and contains the necessary data
+            if (response.status === 'success' && response.data && response.data.length > 0) {
                 const data = response.data[0]; // Access the first item in the array
-                console.log('Fetched Data:', data); // Log the fetched data for inspection
+                console.log('Fetched Data:', data); // Log the fetched data for debugging
 
                 // Populate form fields with the fetched data
                 $('#editId').val(data.id);
@@ -452,24 +483,34 @@ $(document).on('click', '.editItemBtn', function () {
                 const pickupTime = data.pickupTime ? data.pickupTime.replace(' ', 'T') : '';
                 $('#editPickupTime').val(pickupTime);
 
-                // Populate the description and specification description fields with the fetched data
-                $('#editDescription').val(data.description || ''); // Set description field
-                $('#editSpecificationDescription').val(data.specificationDescription || ''); // Set specification description field
+                // Populate the description dropdown (assuming description is a string like "Fragile", "Electronics", etc.)
+                if (data.description) {
+                    $('#editDescription').val(data.description); // Set description in the dropdown
+                } else {
+                    $('#editDescription').val(''); // Clear the dropdown if description is empty
+                }
 
-                // Show the modal for editing
+                // Populate the specification description field (if available)
+                $('#editSpecificationDescription').val(data.specificationDescription || ''); 
+
+                // If you have a status field, populate it
+                $('#editStatus').val(data.status || ''); 
+
+                // Show the modal for editing the delivery item
                 $('#editModal').modal('show');
             } else {
                 alert(response.message || 'No delivery item details found.');
             }
         },
         error: function (xhr, status, error) {
+            // Log AJAX error for debugging
             console.error('AJAX Error:', { status, error, responseText: xhr.responseText });
             alert('Error fetching delivery item details. Please try again.');
         }
     });
 });
 
-// Update item logic
+
 $('#editForm').on('submit', function (e) {
     e.preventDefault(); // Prevent the default form submission
 
@@ -490,14 +531,18 @@ $('#editForm').on('submit', function (e) {
         pickupTime: formatDateForAjax($('#editPickupTime').val()), // Format date for AJAX
         description: $('#editDescription').val(), // Get description value
         specificationDescription: $('#editSpecificationDescription').val(),
-        status: 'Pending', // Assuming status is 'Pending'
+        status: $('#editStatus').val() || "", // Ensure status is set or empty if not available
     };
+
+    // Log formData to ensure it's correct
+    console.log('Form Data:', formData);
 
     // Send the update request
     $.ajax({
-        url: 'edit_delivery_item.php', // Backend endpoint for editing
+        url: 'edit_delivery_item.php', // Corrected URL
         method: 'POST',
-        data: formData, // Send data as form data (not JSON)
+        contentType: 'application/json',
+        data: JSON.stringify(formData), // Send data as JSON
         success: function (response) {
             console.log('Update Response:', response); // Debug response
             handleAjaxResponse(response, 'Item updated successfully!', 'Failed to update item.');
@@ -509,54 +554,32 @@ $('#editForm').on('submit', function (e) {
     });
 });
 
-// Helper function to validate form inputs
+// Format date for AJAX (Ensure the format is compatible with the backend)
+function formatDateForAjax(date) {
+    if (!date) return '';
+    // Format 'YYYY-MM-DDTHH:MM' to 'YYYY-MM-DD HH:MM:SS' (if needed)
+    const formattedDate = date.replace('T', ' '); // Change the 'T' separator
+    return formattedDate;
+}
+
+// Dummy validation function (update based on your form validation rules)
 function validateForm(formSelector) {
-    let isValid = true;
-    $(`${formSelector} input, ${formSelector} select, ${formSelector} textarea`).each(function () {
-        $(this).css('border', ''); // Reset the border before checking
-        if ($(this).prop('required') && $(this).val() === '') {
-            $(this).css('border', '1px solid red'); // Highlight invalid fields
-            isValid = false;
-        }
-    });
+    const isValid = $(formSelector).find('input, select, textarea').filter(function() {
+        return !this.value;
+    }).length === 0; // Ensure all fields have a value
     return isValid;
 }
 
-// Helper function to format date for AJAX
-function formatDateForAjax(date) {
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    const hours = String(d.getHours()).padStart(2, '0');
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const seconds = String(d.getSeconds()).padStart(2, '0');
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
-// Helper function to handle AJAX responses
+// Handle the response from the server
 function handleAjaxResponse(response, successMessage, errorMessage) {
     if (response.status === 'success') {
         alert(successMessage);
-        loadDeliveryItems(); // Reload the table to reflect changes
-        $('#editModal').modal('hide'); // Close the modal after successful update
+        // You can close the modal here or refresh the list
+        $('#editModal').modal('hide'); // Example: Close modal after success
     } else {
-        alert(response.message || errorMessage);
+        alert(errorMessage + " " + (response.message || ''));
     }
 }
-
-// Close modal when clicking the close button
-$(document).on('click', '.close', function () {
-    $('#editModal').modal('hide'); // Hide modal
-});
-
-// Close modal if clicked outside the modal
-$(window).on('click', function (event) {
-    if ($(event.target).hasClass('modal')) {
-        $('#editModal').modal('hide'); // Close modal if user clicks outside of it
-    }
-});
-
 
 </script>
   
