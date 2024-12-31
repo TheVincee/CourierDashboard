@@ -21,6 +21,7 @@ $dropoffAddress = isset($_POST['dropoffAddress']) ? trim($_POST['dropoffAddress'
 $pickupDistance = isset($_POST['pickupDistance']) ? floatval($_POST['pickupDistance']) : 0;
 $dropoffDistance = isset($_POST['dropoffDistance']) ? floatval($_POST['dropoffDistance']) : 0;
 $totalAmount = isset($_POST['totalAmount']) ? floatval($_POST['totalAmount']) : 0;
+$status = 'pending';
 
 // Log the phone number for debugging
 error_log("Phone number received: " . $phone);

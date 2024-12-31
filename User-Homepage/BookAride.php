@@ -39,7 +39,7 @@
     </table>
 </div>
 
-<<!-- Modal for Add Booking -->
+<!-- Modal for Add Booking -->
 <div class="modal fade" id="addBookingModal" tabindex="-1" role="dialog" aria-labelledby="addBookingModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -235,7 +235,7 @@
 
 <!-- Cancel Button -->
 
-.php
+
 <!-- Cancel Booking Modal -->
 <div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
