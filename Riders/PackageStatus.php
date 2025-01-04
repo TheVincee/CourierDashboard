@@ -25,14 +25,15 @@ try {
             throw new Exception('Error fetching delivery items: ' . $conn->error);
         }
 
-    // Handle POST request to update the delivery item status
+    // Handle POST request to update the delivery item status and rider
     } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Get data from POST request
         $itemId = isset($_POST['id']) ? (int) $_POST['id'] : null;
         $status = isset($_POST['status']) ? trim($_POST['status']) : null;
+        $rider = isset($_POST['rider']) ? (int) $_POST['rider'] : null;
 
         // Validate required fields
-        if ($itemId && $status) {
+        if ($itemId && $status && $rider) {
             // Valid status options
             $validStatuses = ['In Transit', 'Delivered'];
 
@@ -42,8 +43,8 @@ try {
                 exit;
             }
 
-            // Prepare the SQL query to update the status
-            $query = "UPDATE delivery_items SET status = ? WHERE id = ?";
+            // Prepare the SQL query to update the status and rider
+            $query = "UPDATE delivery_items SET status = ?, riders_id = ? WHERE id = ?";
             if ($stmt = $conn->prepare($query)) {
                 // Debugging: Check if statement was prepared correctly
                 if ($stmt === false) {
@@ -52,7 +53,7 @@ try {
                 }
 
                 // Bind the parameters
-                $bindResult = $stmt->bind_param("si", $status, $itemId);
+                $bindResult = $stmt->bind_param("sii", $status, $rider, $itemId);
                 if (!$bindResult) {
                     echo json_encode(['success' => false, 'message' => 'Bind failed: ' . $stmt->error]);
                     exit;
@@ -62,7 +63,7 @@ try {
 
                 // Check for successful update
                 if ($stmt->affected_rows > 0) {
-                    echo json_encode(['success' => true, 'message' => 'Item status updated successfully.']);
+                    echo json_encode(['success' => true, 'message' => 'Item status and rider updated successfully.']);
                 } else {
                     echo json_encode(['success' => false, 'message' => 'No changes were made or invalid item ID.']);
                 }

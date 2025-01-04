@@ -93,6 +93,12 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label for="rider" class="form-label">Rider</label>
+                        <select class="form-control" id="rider">
+                            <!-- Rider options will be dynamically populated -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <button type="button" class="btn btn-success" id="updateStatusBtn">Update Status</button>
                     </div>
                 </form>
@@ -107,6 +113,7 @@ function loadPackages() {
     $.ajax({
         url: 'PackageStatus.php',  // PHP script for fetching data
         type: 'GET',
+        dataType: 'json',
         success: function (data) {
             if (data.success && Array.isArray(data.packages)) {
                 const tableBody = $("#packageTable");
@@ -146,6 +153,32 @@ function loadPackages() {
     });
 }
 
+// Function to load riders into the dropdown
+function loadRiders() {
+    $.ajax({
+        url: 'fetchRiders.php',  // PHP script for fetching riders
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            if (data.error) {
+                alert('Error fetching riders: ' + data.error);
+            } else {
+                const riderDropdown = $("#rider");
+                riderDropdown.empty(); // Clear existing options
+                riderDropdown.append('<option value="">Select Rider</option>'); // Add default option
+
+                data.forEach(rider => {
+                    const option = `<option value="${rider.riders_id}">${rider.first_name} ${rider.last_name}</option>`;
+                    riderDropdown.append(option);
+                });
+            }
+        },
+        error: function () {
+            alert("Error fetching riders. Please try again.");
+        }
+    });
+}
+
 // Event listener for the "Pickup" button click inside the table
 $(document).on("click", ".pickup-btn", function () {
     const packageId = $(this).data("id");
@@ -158,18 +191,18 @@ $(document).on("click", ".pickup-btn", function () {
     $("#receiverName").val(receiver);
     $("#packageId").val(packageId);
 
-    // Optionally, you can populate the rider dropdown dynamically if you want to let the admin select a rider
-    // This could involve an additional AJAX call to fetch available riders if necessary
+    // Load riders into the dropdown
+    loadRiders();
 });
 
 // Event listener for the "Update Status" button inside the modal
 $(document).on("click", "#updateStatusBtn", function () {
     const packageId = $("#packageId").val();  // Get the package ID from the hidden input
     const status = $("#status").val();  // Get the selected status from the dropdown
-    const currentRider = "Rider John";  // Assume this is the logged-in rider (could be dynamic)
+    const rider = $("#rider").val();  // Get the selected rider from the dropdown
 
-    // Basic validation to ensure package ID and status are not empty
-    if (!packageId || !status) {
+    // Basic validation to ensure package ID, status, and rider are not empty
+    if (!packageId || !status || !rider) {
         alert("Please fill in all required fields.");
         return;
     }
@@ -178,10 +211,11 @@ $(document).on("click", "#updateStatusBtn", function () {
     $.ajax({
         url: 'PackageStatus.php',  // PHP script for updating the package status
         type: 'POST',
+        dataType: 'json',
         data: {
             id: packageId,
             status: status,
-            rider: currentRider
+            rider: rider
         },
         success: function (response) {
             if (response.success) {
@@ -202,7 +236,6 @@ $(document).on("click", "#updateStatusBtn", function () {
 $(document).ready(function() {
     loadPackages(); // Load the package list
 });
-
 </script>
 
 </body>
